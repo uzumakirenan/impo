@@ -47,11 +47,15 @@
     </div>
 
     <div class="groupItem" style="height: 50px;">
-        <p>monitor works!</p>
+        <p>{{listaIntegContainer.offsetHeight}}</p>
     </div>
     
-    <div class="groupItem" style="flex: 1;">
-        <p>{{listaIntegContainer.offsetHeight}}</p>
+    <div style="flex: 1; display: flex; gap: 10px; position: relative;">
+        <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da integração</span>
+        <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly></textarea>
+
+        <span style="position: absolute; left: calc(50% + 15px); top: 5px; font-weight: 600;">Json</span>
+        <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly></textarea>
     </div>
 </div>
 
