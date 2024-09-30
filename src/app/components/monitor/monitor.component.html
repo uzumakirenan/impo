@@ -1,0 +1,58 @@
+<div style="height: 100%; width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 10px;">
+    <div #listaIntegContainer class="groupItem" style="flex: 2; padding: 0;">
+        <po-table
+            id="listaIntegTable"
+            [p-hide-columns-manager]="true"
+            [p-sort]="true"
+            [p-striped]="true"
+            [p-selectable]="true"
+            [p-single-select]="true"
+            [p-height]="listaIntegContainer.offsetHeight - 2"
+
+            [p-columns]="integracaoTableColumns"
+            [p-items]="[
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', numDocto: 20 },
+                { situacao: {desc: 'ERROR', color: 'red', textColor: 'white'}, dtIntegracao: '22/07/1997', horaIntegracao: '15:00:00', numDocto: 20 },
+            ]"
+        >
+            <ng-template p-table-column-template p-property="situacao" let-value >
+                <div style="display: flex; align-items: center; justify-content: center;">                        
+                    <po-tag [p-value]="value.desc" [p-color]="value.color" [p-text-color]="value.textColor"> </po-tag>                        
+                </div>
+            </ng-template>
+        </po-table>
+    </div>
+
+    <div class="groupItem" style="height: 50px;">
+        <p>monitor works!</p>
+    </div>
+    
+    <div class="groupItem" style="flex: 1;">
+        <p>{{listaIntegContainer.offsetHeight}}</p>
+    </div>
+</div>
+
+

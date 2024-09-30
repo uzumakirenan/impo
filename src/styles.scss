@@ -1,1 +1,133 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    box-sizing: border-box !important;
+}
+
+::-webkit-scrollbar{
+    height: 8px;
+    width: 8px;
+    background: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar-thumb{
+    height: 8px;
+    width: 8px;
+    background: #ccc;
+    border-radius: 50px;
+}
+
+.loadingBackscreen{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 9999999;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0000007a;
+}
+
+.loadingContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 50px 100px;
+    box-shadow: inset 0px 0px 5px 0px black;
+}
+
+
+.po-page-content{
+    margin: 0;
+    padding: 0;
+    height: calc(100% - 48px) !important;
+}
+
+.groupItem {
+    border: 1px solid #ccc; 
+    overflow: hidden; 
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+/******************************* MODIFICAÇÕES POUI *******************************/
+
+//Congelar as duas primeiras colunas
+#listaIntegTable table {
+    position: relative;
+}
+
+#listaIntegTable td:nth-child(2), #listaIntegTable th:nth-child(2){
+    position: sticky; left: 0;
+}
+
+#listaIntegTable td:nth-child(3), #listaIntegTable th:nth-child(3){
+    position: sticky; left: 85.84px;
+}
+
+/* Remove o outline preto e deixa a borda na cor do tema */
+input:focus, textarea:focus, select:focus, button:focus{
+    outline: none !important;
+    border-width: 2px;
+}
+
+.po-table-column-selectable { 
+    display: none;
+}
+
+
+/* Coloca os icones do datepicker interno */
+.po-field-container-content-datepicker {
+    position: relative;
+}
+
+.po-datepicker-button {
+    position: absolute;
+    right: 0px;
+    top: 8px;
+}
+
+.po-datepicker-button .po-button:active {
+    color: unset;
+    background: unset;
+}
+
+.po-datepicker-button .po-button:enabled:active {
+    color: var(--color);
+    background: unset;
+}
+
+.po-datepicker-button .po-button:focus {
+    outline-color: unset;
+    outline-width: unset;
+    outline-style: unset;
+    outline-offset: unset;
+}
+
+.po-datepicker-button .po-button:focus-visible {
+    outline-width: unset;
+}
+
+.po-datepicker-button .po-button:hover {
+    color: var(--color);
+    background: unset;
+}
+
+/* Aproxima as labels dos inputs */
+.po-field-container-content {
+    padding-top: 0px;
+}
+
+.po-field-container-content .po-button-container{
+    padding-bottom: 15px;
+}
+
+.po-field-container-content .po-field-icon-container-right {
+    top: 22px
+}
