@@ -1,16 +1,45 @@
-import { Component } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { PoComponentsModule, PoTableColumn } from '@po-ui/ng-components';
+import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-monitor',
   standalone: true,
   imports: [
-    PoComponentsModule
+    FormsModule,
+    PoComponentsModule,
+    JsonPipe,
+    PoCodeEditorModule
   ],
   templateUrl: './monitor.component.html',
   styleUrl: './monitor.component.scss'
 })
-export class MonitorComponent {
+export class MonitorComponent implements OnInit{
+  jsonTeste:Object = {
+      nome: "Renan", 
+      idade: 34,
+      nacionalidade: "Brasileiro",
+      conjuge: {
+        nome: "Milena",
+        idade: 27
+      },
+      filhos: [
+        {
+          nome: "Sarah",
+          idade: 10
+        },
+        {
+          nome: "Ayla",
+          idade: 2
+        },
+      ]
+    }
+
+  ngOnInit(): void {
+  }
+  
 
   public readonly integracaoTableColumns: Array<PoTableColumn> = [
     { 
@@ -29,7 +58,6 @@ export class MonitorComponent {
     { property: 'estab', label: 'Estabelecimento' },
     { property: 'matricula', label: 'Matrícula' },
     { property: 'nomeFuncionario', label: 'Nome Funcionário' },
-    { property: 'emp', label: 'Empresa' },
     { property: 'dataCalendario', label: 'Data Calendario' },
     { property: 'escala', label: 'Escala' },
     { property: 'kdiario', label: 'KDiario' },
