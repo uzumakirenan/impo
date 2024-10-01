@@ -48,7 +48,7 @@ export class MonitorComponent implements OnInit{
       type: 'columnTemplate'
       //color: this.rowColor.bind(this) 
     },
-    { property: 'dtIntegracao', label: 'Data Integração', type: 'date' },
+    { property: 'dtIntegracao', label: 'Data Integração' },
     { property: 'horaIniIntegracao', label: 'Hr Ini. Integração' },
     { property: 'horaIniApiDts', label: 'Hora Inicio Integração' },
     { property: 'horaFimApiDts', label: 'Hora Inicio Integração' },
@@ -59,7 +59,7 @@ export class MonitorComponent implements OnInit{
     { property: 'matricula', label: 'Matrícula' },
     { property: 'nomeFuncionario', label: 'Nome Funcionário' },
     { property: 'dataCalendario', label: 'Data Calendario' },
-    { property: 'escala', label: 'Escala' },
+    { property: 'escala', label: 'Escala', type: 'number' },
     { property: 'kdiario', label: 'KDiario' },
     { property: 'tipoDia', label: 'Tipo Dia' },
     { property: 'inicio-jornada-1', label: 'Ini Jornada 1' },
