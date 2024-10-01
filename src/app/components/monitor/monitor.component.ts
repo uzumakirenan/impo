@@ -1,7 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PoComponentsModule, PoTableColumn } from '@po-ui/ng-components';
-import { PoCodeEditorModule } from '@po-ui/ng-code-editor';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,8 +9,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     FormsModule,
     PoComponentsModule,
-    JsonPipe,
-    PoCodeEditorModule
+    JsonPipe
   ],
   templateUrl: './monitor.component.html',
   styleUrl: './monitor.component.scss'
