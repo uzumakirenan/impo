@@ -20,4 +20,8 @@ export class MonitorService {
   getStatusPasoe():Observable<any>{
     return this.httpClient.get<any>(this.url + "getStatusPasoe")
   }
+
+  getNovasEntradas():Observable<any>{
+    return this.httpClient.get<any>(this.url + "getNovasEntradas")
+  }
 }

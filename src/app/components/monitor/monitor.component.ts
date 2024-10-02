@@ -30,11 +30,14 @@ export class MonitorComponent implements OnInit{
   filters:IntegracaoFilter = new IntegracaoFilter()
   lastFilters?:IntegracaoFilter
   pasoeIsConnected:string = "pasoeON"
-  bancosDisconectados:string = ""
-  autoRefreshSwitch:boolean = false
+  bancosDesconectados:string = ""
+  autoRefreshSwitch:boolean = true
   intervalAutoRefresh?:any
   lastUpdate?:Date
   firstSearch:boolean = true
+  ultimosRegistros:number = 0
+  novosRegistros:number = 0
+  totalNovosRegistros:number = 0
 
   constructor(
     private monitorService: MonitorService,
@@ -44,13 +47,21 @@ export class MonitorComponent implements OnInit{
   currentRequest?:any
 
   ngOnInit(): void {
+    this.notificationsService.setDefaultDuration(3000)
+    this.autoRefresh()
     this.getStatusPasoe()
   }
   
   public readonly integracaoTableColumns: Array<PoTableColumn> = [
     { 
-      property: 'situacao', 
-      label: 'Status', 
+      property: 'situacaoInteg', 
+      label: 'Status Integração', 
+      type: 'columnTemplate'
+      //color: this.rowColor.bind(this) 
+    },
+    { 
+      property: 'situacaoRegra', 
+      label: 'Regra de Negocio', 
       type: 'columnTemplate'
       //color: this.rowColor.bind(this) 
     },
@@ -94,11 +105,15 @@ export class MonitorComponent implements OnInit{
 
       complete: () => {
         this.loading = false
+        this.novosRegistros = 0
+        this.ultimosRegistros = 0
+        this.totalNovosRegistros = 0
       }
     })
   }
 
   clickInIntegration(e:any){
+    console.log(this.integrations)
     this.retornoIntegracao = e.retornoIntegracao
     this.jsonEnviado = JSON.parse(e.jsonEnviado)
     this.jsonRetorno = JSON.parse(e.jsonRetorno)
@@ -219,23 +234,42 @@ export class MonitorComponent implements OnInit{
       this.monitorService.getStatusPasoe().subscribe({
         next: result => {
           this.pasoeIsConnected = result.status
-          this.bancosDisconectados = result.bancosDisconectados
+          this.bancosDesconectados = result.bancosDisconectados
+          console.log(result)
         },
 
         complete: () => {
-          if(this.pasoeIsConnected && this.bancosDisconectados.length > 0){
+          if(this.pasoeIsConnected && this.bancosDesconectados.length > 0){
             this.pasoeIsConnected = "pasoeWARNING"
           }
         }
       })
-    }, 30000)
+    }, 60000)
   }
 
   autoRefresh(){
     this.intervalAutoRefresh = setInterval(()=>{
-      this.refresh()
+      this.monitorService.getNovasEntradas().subscribe({
+        next: result => {
+          if(this.ultimosRegistros <= 0 || this.ultimosRegistros > result.registros){
+            this.ultimosRegistros = result.registros
+          } else {
+            this.novosRegistros = result.registros - this.ultimosRegistros
+            this.ultimosRegistros = result.registros
+            this.totalNovosRegistros = this.totalNovosRegistros + this.novosRegistros
+          }
+          
+        },
+
+        complete: () => {
+          if(this.novosRegistros > 0){
+            this.notificationsService.success(`${this.novosRegistros} registros integrados no ultimo minuto.`)
+            this.novosRegistros = 0
+          }
+        }
+      })
       this.lastUpdate = new Date()
-    }, 10000)
+    }, 5000)
   }
 
   changeAutoRefresh(e:any){
@@ -244,5 +278,20 @@ export class MonitorComponent implements OnInit{
     } else {
       this.autoRefresh()
     }
+  }
+
+  saveJson(content:string, fileName:string){
+    const contentString = JSON.stringify(content)
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style.display = "none";
+
+    const blob = new Blob([contentString], {type: "plain/text"})
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = fileName + ".json";
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 }

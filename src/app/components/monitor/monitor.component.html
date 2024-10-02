@@ -23,17 +23,20 @@
                 }
 
                 @if(pasoeIsConnected == "pasoeWARNING"){
-                    <p><strong>PASOE Conectado (bancos indisponiveis: {{bancosDisconectados}}) </strong></p>
+                    <p><strong>PASOE Conectado (bancos indisponiveis: {{bancosDesconectados}}) </strong></p>
                 }                
             </div>
             
             <div style="display: flex; align-items: center; justify-content: center; gap: 5px">
                 <div style="padding-top: 8px;">
-                    <po-switch name="switch" [(ngModel)]="autoRefreshSwitch" (p-change)="changeAutoRefresh($event)" [p-disabled]="firstSearch"> </po-switch>
+                    <po-switch name="switch" [(ngModel)]="autoRefreshSwitch" (p-change)="changeAutoRefresh($event)" > </po-switch>
                 </div>                
-                <p>Atualização Automática -</p>
+                <p>Verificar novas entradas</p>
                 @if(lastUpdate){
-                    <p>Ultima atualização: <strong>{{lastUpdate.toLocaleString()}}</strong></p>
+                    <p>-</p>
+                    <p>{{lastUpdate.toLocaleString()}}</p>
+                    <p>-</p>
+                    <p><strong>{{this.totalNovosRegistros}}</strong></p>
                 }
                 
             </div>
@@ -54,7 +57,7 @@
                 [p-columns]="integracaoTableColumns"
                 [p-items]="integrations"
             >
-                <ng-template p-table-column-template p-property="situacao" let-value >
+                <ng-template p-table-column-template p-property="situacaoInteg" let-value >
                     <div style="display: flex; align-items: center; justify-content: center;"> 
                         @if(value == "OK"){
                             <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>                        
@@ -66,20 +69,47 @@
                         
                     </div>
                 </ng-template>
+
+                <ng-template p-table-column-template p-property="situacaoRegra" let-value >
+                    <div style="display: flex; align-items: center; justify-content: center;"> 
+                        @if(value == "OK"){
+                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                        }
+    
+                        @else {
+                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                        }
+                        
+                    </div>
+                </ng-template>
             </po-table>
         </div>
 
-        <div class="groupItem" style="height: 50px; display: flex; align-items: center; justify-content: space-between;">
-            <p>Tentativas de Integrações: {{numeraisIntegracao(1)}}</p>
-            <p style="color: red;">Integrações com erro: {{numeraisIntegracao(2)}}</p>
-            <p style="color: green;"><strong>Integrações sucesso: {{numeraisIntegracao(3)}}</strong></p>
+        <div id="dadosTela" class="groupItem">
+            <div class="dadosTelaGroup">
+                <span><strong>Tentativas de Integrações</strong></span>
+                <input type="number" class="po-input" readonly [value]="numeraisIntegracao(1)">
+            </div>   
+            
+            <div class="dadosTelaGroup">
+                <span><strong>Integrações com erro</strong></span>
+                <input type="number" class="po-input" readonly [value]="numeraisIntegracao(2)">
+            </div>   
+
+            <div class="dadosTelaGroup">
+                <span><strong>Integrações sucesso</strong></span>
+                <input type="number" class="po-input" readonly [value]="numeraisIntegracao(3)">
+            </div>   
         </div>
         
         <div style="flex: 1; display: flex; gap: 10px; position: relative;">
-            <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da integração</span>
-            <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly>{{retornoIntegracao}}</textarea>
+            <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da regra de negócio</span>
+
+            <div class="groupItem" style="flex: 1; overflow-y: hidden; padding-top: 40px;">
+                <textarea style="border: none; width: 100%; height: 100%; resize:none; overflow-y: scroll;" readonly>{{retornoIntegracao | json}}</textarea>
+            </div>
     
-            <span style="position: absolute; left: calc(50% + 15px); top: 5px; font-weight: 600;">{{tipoJson}}</span>
+            <span style="position: absolute; left: calc(50% + 15px); top: 5px; font-weight: 600;">Retorno Integração - {{tipoJson}}</span>
     
             <po-select style="position: absolute; right: 85px; top: 10px; font-weight: 600;"
                 [ngModel]="tipoJson"
@@ -91,9 +121,34 @@
                     ]"
             >
             </po-select>
-            <po-button style="position: absolute; right: 25px; top: 10px;" 
-                p-icon="po-icon-download" title="Download Json"
-            ></po-button>
+
+            @if(tipoJson == "Json Enviado"){
+                @if(jsonEnviado){
+                    <po-button style="position: absolute; right: 25px; top: 10px;" 
+                        p-icon="po-icon-download" title="Download Json" (p-click)="saveJson(jsonEnviado, 'json_enviado')"
+                    ></po-button>
+                } 
+                
+                @else {
+                    <po-button style="position: absolute; right: 25px; top: 10px;" 
+                        p-icon="po-icon-download" title="Download Json" [p-disabled]="true"
+                    ></po-button>
+                }
+            }
+            
+            @if(tipoJson == "Json Retorno"){
+                @if(jsonRetorno){
+                    <po-button style="position: absolute; right: 25px; top: 10px;" 
+                        p-icon="po-icon-download" title="Download Json" (p-click)="saveJson(jsonRetorno, 'json_retorno')"
+                    ></po-button>
+                }
+
+                @else {
+                    <po-button style="position: absolute; right: 25px; top: 10px;" 
+                        p-icon="po-icon-download" title="Download Json" [p-disabled]="true"
+                    ></po-button>
+                }
+            }
             
             <div class="groupItem" style="flex: 1; overflow-y: hidden; padding-top: 40px;">
                 @if(tipoJson == "Json Enviado"){
@@ -222,6 +277,38 @@
                 p-mask-format-model="true"
                 [p-maxlength]="9"
                 p-placeholder="999999999"
+            ></po-input>
+        </div>
+
+        <div class="po-row">
+            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.dtIniIntegracao"
+                p-label="Data da marcação"
+                p-format="dd/mm/yyyy"
+                p-placeholder="01/01/0001"></po-datepicker>
+    
+            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.dtFimIntegracao"
+                p-label=" "                
+                p-placeholder="31/12/9999"></po-datepicker>
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.horaIniIntegracao"
+                p-label="Hora da marcação"
+                p-mask="99:99:99"
+                p-mask-format-model="true"
+                [p-maxlength]="8"
+            ></po-input>
+    
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.horaFimIntegracao"
+                p-label=" "
+                p-mask="99:99:99"
+                p-mask-format-model="true"
+                [p-maxlength]="8"
+                p-placeholder="ZZZZZZZZ"
             ></po-input>
         </div>
     </po-container>

@@ -70,6 +70,24 @@
     border: 1px solid linear-gradient(yellow, white);
 }
 
+#dadosTela{
+    display: flex;
+    height: 80px;
+    gap: 50px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+#dadosTela > .dadosTelaGroup {
+    width: 100%;
+}
+
+#dadosTela > .dadosTelaGroup > input{
+    min-height: 30px;
+    max-height: 30px;
+}
+
 
 /******************************* MODIFICAÇÕES POUI *******************************/
 
@@ -83,7 +101,7 @@
 }
 
 #listaIntegTable td:nth-child(3), #listaIntegTable th:nth-child(3){
-    position: sticky; left: 85.84px;
+    position: sticky; left: 165.5px;
 }
 
 /* Remove o outline preto e deixa a borda na cor do tema */
