@@ -1,63 +1,254 @@
-<div style="height: 100%; width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 10px;">
-    <div #listaIntegContainer class="groupItem" style="flex: 2; padding: 0;">
-        <po-table
-            id="listaIntegTable"
-            [p-hide-columns-manager]="true"
-            [p-sort]="true"
-            [p-striped]="true"
-            [p-selectable]="true"
-            [p-single-select]="true"
-            [p-height]="listaIntegContainer.offsetHeight - 2"
-
-            [p-columns]="integracaoTableColumns"
-            [p-items]="[
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'OK', color: 'green', textColor: 'white'}, dtIntegracao: '29/06/1990', horaIntegracao: '13:00:00', escala: 3 },
-                { situacao: {desc: 'ERROR', color: 'red', textColor: 'white'}, dtIntegracao: '22/07/1997', horaIntegracao: '15:00:00', escala: 3 },
-            ]"
-        >
-            <ng-template p-table-column-template p-property="situacao" let-value >
-                <div style="display: flex; align-items: center; justify-content: center;">                        
-                    <po-tag [p-value]="value.desc" [p-color]="value.color" [p-text-color]="value.textColor"> </po-tag>                        
-                </div>
-            </ng-template>
-        </po-table>
+@if(loading){
+    <div class="loadingBackscreen">
+        <div class="loadingContainer">
+            <po-loading-icon p-size="lg"></po-loading-icon>
+            <p>Buscando Integrações...</p>
+            <po-button p-label="Cancelar" (p-click)="cancelRequest()" style="margin-top: 20px;"></po-button>
+        </div>        
     </div>
-
-    <div class="groupItem" style="height: 50px;">
-        <p>{{listaIntegContainer.offsetHeight}}</p>
-    </div>
+}
+<div style="height: 100%; width: 100%; display: flex; padding: 10px 0px 8px 8px;">
+    <div style="height: 100%; flex: 1; display: flex; flex-direction: column; gap: 10px;">
     
-    <div style="flex: 1; display: flex; gap: 10px; position: relative;">
-        <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da integração</span>
-        <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly></textarea>
+        <div class="groupItem" style="height: 50px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <div style="width: 25px; height: 25px; border-radius: 50px;" [class]="pasoeIsConnected"></div>
+                
+                @if(pasoeIsConnected == "pasoeON"){
+                    <p><strong>PASOE Conectado</strong></p>
+                }
 
-        <span style="position: absolute; left: calc(50% + 15px); top: 5px; font-weight: 600;">Json</span>        
+                @if(pasoeIsConnected == "pasoeOFF"){
+                    <p><strong>PASOE Desconectado</strong></p>
+                }
+
+                @if(pasoeIsConnected == "pasoeWARNING"){
+                    <p><strong>PASOE Conectado (bancos indisponiveis: {{bancosDisconectados}}) </strong></p>
+                }                
+            </div>
+            
+            <div style="display: flex; align-items: center; justify-content: center; gap: 5px">
+                <div style="padding-top: 8px;">
+                    <po-switch name="switch" [(ngModel)]="autoRefreshSwitch" (p-change)="changeAutoRefresh($event)" [p-disabled]="firstSearch"> </po-switch>
+                </div>                
+                <p>Atualização Automática -</p>
+                @if(lastUpdate){
+                    <p>Ultima atualização: <strong>{{lastUpdate.toLocaleString()}}</strong></p>
+                }
+                
+            </div>
+        </div>
         
-        <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly>{{jsonTeste | json}}</textarea>
+        <div #listaIntegContainer class="groupItem" style="flex: 2; padding: 0;">
+            <po-table
+                id="listaIntegTable"
+                [p-hide-columns-manager]="true"
+                [p-sort]="true"
+                [p-striped]="true"
+                [p-selectable]="true"
+                [p-single-select]="true"
+                [p-height]="listaIntegContainer.offsetHeight - 2"
+                (p-selected)="clickInIntegration($event)"
+                (p-unselected)="clickOutIntegration()"
+    
+                [p-columns]="integracaoTableColumns"
+                [p-items]="integrations"
+            >
+                <ng-template p-table-column-template p-property="situacao" let-value >
+                    <div style="display: flex; align-items: center; justify-content: center;"> 
+                        @if(value == "OK"){
+                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>                        
+                        }
+    
+                        @else {
+                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                        }
+                        
+                    </div>
+                </ng-template>
+            </po-table>
+        </div>
+
+        <div class="groupItem" style="height: 50px; display: flex; align-items: center; justify-content: space-between;">
+            <p>Tentativas de Integrações: {{numeraisIntegracao(1)}}</p>
+            <p style="color: red;">Integrações com erro: {{numeraisIntegracao(2)}}</p>
+            <p style="color: green;"><strong>Integrações sucesso: {{numeraisIntegracao(3)}}</strong></p>
+        </div>
+        
+        <div style="flex: 1; display: flex; gap: 10px; position: relative;">
+            <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da integração</span>
+            <textarea class="groupItem" style="flex: 1; resize:none; overflow-y: scroll; padding-top: 40px;" readonly>{{retornoIntegracao}}</textarea>
+    
+            <span style="position: absolute; left: calc(50% + 15px); top: 5px; font-weight: 600;">{{tipoJson}}</span>
+    
+            <po-select style="position: absolute; right: 85px; top: 10px; font-weight: 600;"
+                [ngModel]="tipoJson"
+                (ngModelChange)="tipoJson = $event"
+                [p-options]="
+                    [
+                        {label: 'Json Enviado', value: 'Json Enviado'},
+                        {label: 'Json Retorno', value: 'Json Retorno'},
+                    ]"
+            >
+            </po-select>
+            <po-button style="position: absolute; right: 25px; top: 10px;" 
+                p-icon="po-icon-download" title="Download Json"
+            ></po-button>
+            
+            <div class="groupItem" style="flex: 1; overflow-y: hidden; padding-top: 40px;">
+                @if(tipoJson == "Json Enviado"){
+                    <textarea style="border: none; width: 100%; height: 100%; resize:none; overflow-y: scroll;" readonly>{{jsonEnviado | json}}</textarea>
+                }
+                
+                @if(tipoJson == "Json Retorno"){
+                    <textarea style="border: none; width: 100%; height: 100%; resize:none; overflow-y: scroll;" readonly>{{jsonRetorno | json}}</textarea>
+                }
+            </div>
+            
+        </div>
+    </div>
+
+    <div style="height: calc(100% - 10px); width: 70px; display: flex; flex-direction: column; align-items: center;">
+        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" (p-click)="openParameter()" p-icon="po-icon-settings" title="Parâmetros"></po-button>
+        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" (p-click)="openFilter()" p-icon="po-icon-filter" title="Filtros"></po-button>
+        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" [p-disabled]="firstSearch" (p-click)="refresh()" p-icon="po-icon-refresh" title="Atualizar"></po-button>
+        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" p-icon="po-icon-doc-xls" title="Exportar para Excel"></po-button>
     </div>
 </div>
 
+<!-- MODAIS -->
+    
+<!-- FILTROS -->
+<po-modal #modalFilters p-title="Filtros">
+    <po-container>
+        <div class="po-row">
+            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.dtIniIntegracao"
+                p-label="Data de Integração"
+                p-format="dd/mm/yyyy"
+                p-placeholder="01/01/0001"></po-datepicker>
+    
+            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.dtFimIntegracao"
+                p-label=" "                
+                p-placeholder="31/12/9999"></po-datepicker>        
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.horaIniIntegracao"
+                p-label="Hora da integração"
+                p-mask="99:99:99"
+                p-mask-format-model="true"
+                [p-maxlength]="8"
+            ></po-input>
+    
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.horaFimIntegracao"
+                p-label=" "
+                p-mask="99:99:99"
+                p-mask-format-model="true"
+                [p-maxlength]="8"
+                p-placeholder="ZZZZZZZZ"
+            ></po-input>
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-select class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [ngModel]="filters.statusIntegracao"
+                (ngModelChange)="filters.statusIntegracao = $event"
+                name="Status"
+                p-label="Status"
+                [p-options]="
+                    [
+                        { label: 'TODOS', value: 'TODOS' },
+                        { label: 'OK', value: 'OK' },
+                        { label: 'ERRO', value: 'ERRO' }
+                    ]"                
+            ></po-select>
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.empresaIni"
+                p-label="Cod. Empresa"
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="3"
+            ></po-input>
+
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.empresaFim"
+                p-label=" "
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="3"
+                p-placeholder="999"
+            ></po-input>
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.estabelIni"
+                p-label="Cod. Estabelecimento"
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="3"
+            ></po-input>
+
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.estabelFim"
+                p-label=" "
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="3"
+                p-placeholder="999"
+            ></po-input>
+        </div>
+
+        <div class="po-row po-mb-1">
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.matriculaIni"
+                p-label="Matricula"
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="9"
+            ></po-input>
+
+            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [(ngModel)]="filters.matriculaFim"
+                p-label=" "
+                p-mask="999"
+                p-mask-format-model="true"
+                [p-maxlength]="9"
+                p-placeholder="999999999"
+            ></po-input>
+        </div>
+    </po-container>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-label="Resetar Filtros" (p-click)="resetFilters()"> </po-button>
+        <po-button p-label="Cancelar" (p-click)="cancelFilter()"> </po-button>
+        <po-button p-label="OK" (p-click)="okFilter()"> </po-button>
+    </po-modal-footer>
+
+</po-modal>
+
+
+<po-modal #modalParameter p-title="Filtros" [p-hide-close]="true">
+    <po-container>
+        <div class="po-row">
+            <po-checkbox [(ngModel)]="filters.planejadoSipDts" p-label="Envio Planejado SIP x Datasul" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
+            <po-checkbox [(ngModel)]="filters.movimentacaoSipDts" p-label="Envio Movimentação SIP x Datasul" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
+            <po-checkbox [(ngModel)]="filters.marcacoesCarolDtsSip" p-label="Envio Marcações Carol x Datasul/ISP" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
+            <po-checkbox [(ngModel)]="filters.marcacoesCingoSip" p-label="Envio Marcações Cingo x SIP" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
+        </div>
+    </po-container>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-label="Cancelar" (p-click)="cancelParameter()"> </po-button>
+        <po-button p-label="OK" (p-click)="okParameter()"> </po-button>
+    </po-modal-footer>
+
+</po-modal>
 

@@ -55,6 +55,21 @@
     padding: 10px;
 }
 
+.pasoeON {
+    background: linear-gradient(lightgreen, green);
+    border: 1px solid linear-gradient(green, lightgreen);
+}
+
+.pasoeOFF {
+    background: linear-gradient(lightcoral, red);
+    border: 1px solid linear-gradient(red, lightcoral);
+}
+
+.pasoeWARNING {
+    background: linear-gradient(white, yellow);
+    border: 1px solid linear-gradient(yellow, white);
+}
+
 
 /******************************* MODIFICAÇÕES POUI *******************************/
 
