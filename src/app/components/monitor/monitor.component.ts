@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PoComponentsModule,PoModalComponent, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
+import { PoComponentsModule,PoModalComponent, PoNotificationService, PoTableColumn, PoTableColumnSpacing, PoTableDetail, PoTableRowTemplateArrowDirection } from '@po-ui/ng-components';
 import { FormsModule } from '@angular/forms';
 import { MonitorService } from '../../services/monitor.service';
 import { IntegracaoFilter } from '../../interfaces/integracao.interfaceFilter';
@@ -51,6 +51,9 @@ export class MonitorComponent implements OnInit{
     this.autoRefresh()
     this.getStatusPasoe()
   }
+
+  public readonly directionTableTemplate:PoTableRowTemplateArrowDirection = PoTableRowTemplateArrowDirection.Left
+  public readonly spacingColumns:PoTableColumnSpacing = PoTableColumnSpacing.Small
   
   public readonly integracaoTableColumns: Array<PoTableColumn> = [
     { 
@@ -59,17 +62,20 @@ export class MonitorComponent implements OnInit{
       type: 'columnTemplate'
       //color: this.rowColor.bind(this) 
     },
-    { 
-      property: 'situacaoRegra', 
-      label: 'Regra de Negocio', 
-      type: 'columnTemplate'
-      //color: this.rowColor.bind(this) 
-    },
+    { property: 'tipo', label: 'Tipo da integração' },
     { property: 'dtIntegracao', label: 'Data Integração', type: "date" },
     { property: 'horaIniIntegracao', label: 'Hr Ini. Integração' },
     { property: 'horaIniApiDts', label: 'Hora Ini Api Dts' },
     { property: 'horaFimApiDts', label: 'Hora Fim Api Dts' },
-    { property: 'horaFimIntegracao', label: 'Hora Fim Integração' },
+    { property: 'horaFimIntegracao', label: 'Hora Fim Integração' }    
+  ];
+
+  public readonly envPlanSipDts: Array<PoTableColumn> = [
+    { 
+      property: 'situacaoRegra', 
+      label: 'Regra de Negócio', 
+      type: 'columnTemplate'
+    },
     { property: 'emp', label: 'Empresa' },
     { property: 'estab', label: 'Estabelecimento' },
     { property: 'matricula', label: 'Matrícula' },
@@ -84,6 +90,21 @@ export class MonitorComponent implements OnInit{
     { property: 'fimJoranada2', label: 'Fim Jornada 2' },
     { property: 'sindicato', label: 'Sindicato' },
     { property: 'posto', label: 'Posto' }
+  ];
+
+  public readonly envMovSipDts: Array<PoTableColumn> = [
+    { property: 'nome', label: 'nombre' },
+    { property: 'idade', label: 'anos' }
+  ];
+
+  public readonly envMarCarolDtsIsp: Array<PoTableColumn> = [
+    { property: 'nome', label: 'Nome' },
+    { property: 'idade', label: 'Idade' }
+  ];
+
+  public readonly envMarCingoSip: Array<PoTableColumn> = [
+    { property: 'nome', label: 'Nome' },
+    { property: 'idade', label: 'Idade' }
   ];
 
   cancelRequest(){

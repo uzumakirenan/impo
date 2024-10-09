@@ -91,18 +91,34 @@
 
 /******************************* MODIFICAÇÕES POUI *******************************/
 
-//Congelar as duas primeiras colunas
+//Congelar colunas tabela pai e detalhes
+
 #listaIntegTable table {
     position: relative;
 }
 
 #listaIntegTable td:nth-child(2), #listaIntegTable th:nth-child(2){
+    width: 170px;
     position: sticky; left: 0;
 }
 
 #listaIntegTable td:nth-child(3), #listaIntegTable th:nth-child(3){
-    position: sticky; left: 165.5px;
+    width: 170px;
+    position: sticky; left: 56px;
 }
+
+#detailPoTable table {
+    position: relative !important;
+}
+
+#detailPoTable td:nth-child(2), #detailPoTable th:nth-child(2){
+    position: sticky !important; left: 0px !important;
+}
+
+#detailPoTable td:nth-child(3), #detailPoTable th:nth-child(3){
+    position: unset !important;
+}
+
 
 /* Remove o outline preto e deixa a borda na cor do tema */
 input:focus, textarea:focus, select:focus, button:focus{
@@ -110,6 +126,7 @@ input:focus, textarea:focus, select:focus, button:focus{
     border-width: 2px;
 }
 
+/* Esconde o radio button ou checkbox da table para seleção de linha */
 .po-table-column-selectable { 
     display: none;
 }

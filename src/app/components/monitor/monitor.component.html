@@ -45,9 +45,11 @@
         <div #listaIntegContainer class="groupItem" style="flex: 2; padding: 0;">
             <po-table
                 id="listaIntegTable"
+                [p-hide-action-fixed-columns]="false"
                 [p-hide-columns-manager]="true"
                 [p-sort]="true"
                 [p-striped]="true"
+                [p-spacing]="spacingColumns"
                 [p-selectable]="true"
                 [p-single-select]="true"
                 [p-height]="listaIntegContainer.offsetHeight - 2"
@@ -57,7 +59,7 @@
                 [p-columns]="integracaoTableColumns"
                 [p-items]="integrations"
             >
-                <ng-template p-table-column-template p-property="situacaoInteg" let-value >
+                <ng-template p-table-column-template p-property="situacaoInteg" let-value style="max-width: 50px;">
                     <div style="display: flex; align-items: center; justify-content: center;"> 
                         @if(value == "OK"){
                             <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>                        
@@ -70,16 +72,87 @@
                     </div>
                 </ng-template>
 
-                <ng-template p-table-column-template p-property="situacaoRegra" let-value >
-                    <div style="display: flex; align-items: center; justify-content: center;"> 
-                        @if(value == "OK"){
-                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                <ng-template
+                    p-table-row-template
+                    let-rowItem
+                    let-i="rowIndex"
+                    [p-table-row-template-arrow-direction]="directionTableTemplate"
+                >
+                    <div style="border: 1px solid #ccc; border-top: none;">
+
+                        @if(rowItem.tipo == "Envio Planejado SIP x Datasul"){
+                            <po-table
+                                id="detailPoTable"
+                                [p-hide-columns-manager]="true"
+                                [p-sort]="true"
+                                [p-striped]="true"
+                                [p-spacing]="spacingColumns"
+                                [p-selectable]="true"
+                                [p-single-select]="true"
+                    
+                                [p-columns]="envPlanSipDts"
+                                [p-items]="rowItem.detail"
+                            >
+                                <ng-template p-table-column-template p-property="situacaoRegra" let-value >
+                                    <div style="display: flex; align-items: center; justify-content: center;"> 
+                                        @if(value == "OK"){
+                                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                                        }
+                    
+                                        @else {
+                                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                                        }
+                                        
+                                    </div>
+                                </ng-template>
+                            </po-table>
                         }
-    
-                        @else {
-                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+
+                        @else if(rowItem.tipo == "Envio Movimentação SIP x Datasul"){
+                            <po-table
+                                [p-hide-columns-manager]="true"
+                                [p-sort]="true"
+                                [p-striped]="true"
+                                [p-spacing]="spacingColumns"
+                                [p-selectable]="true"
+                                [p-single-select]="true"
+                    
+                                [p-columns]="envMovSipDts"
+                                [p-items]="rowItem.detail"
+                            >
+                            </po-table>
                         }
-                        
+
+                        @else if(rowItem.tipo == "Envio Marcações Carol x Datasul/ISP"){
+                            <po-table
+                                [p-hide-columns-manager]="true"
+                                [p-sort]="true"
+                                [p-striped]="true"
+                                [p-spacing]="spacingColumns"
+                                [p-selectable]="true"
+                                [p-single-select]="true"
+                    
+                                [p-columns]="envMarCarolDtsIsp"
+                                [p-items]="rowItem.detail"
+                            >
+                            </po-table>
+                        }
+
+                        @else if(rowItem.tipo == "Envio Marcações Cingo x SIP"){                            
+                            <po-table
+                                [p-hide-columns-manager]="true"
+                                [p-sort]="true"
+                                [p-striped]="true"
+                                [p-spacing]="spacingColumns"
+                                [p-selectable]="true"
+                                [p-single-select]="true"
+                    
+                                [p-columns]="envMarCingoSip"
+                                [p-items]="rowItem.detail"
+                            >
+                            </po-table>
+                        }
+
                     </div>
                 </ng-template>
             </po-table>
