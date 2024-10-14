@@ -115,9 +115,28 @@
     position: sticky !important; left: 0px !important;
 }
 
+/* Zebrar tabela detalhe inativando a herança */
 #detailPoTable td:nth-child(3), #detailPoTable th:nth-child(3){
     position: unset !important;
 }
+
+#detailPoTable tbody:nth-child(odd) tr td{
+    background: #FFFFFF !important;
+}
+
+#detailPoTable tbody:nth-child(even) tr td{
+    background: #F2F2F2 !important;
+}
+
+/* Cor da linha selecionado do detalhe */
+#detailPoTable tbody:nth-child(odd) .po-table-row-active td{
+    background: #d7f0fe !important;
+}
+
+#detailPoTable tbody:nth-child(even) .po-table-row-active td{
+    background: #d7f0fe !important;
+}
+
 
 
 /* Remove o outline preto e deixa a borda na cor do tema */

@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PoComponentsModule,PoModalComponent, PoNotificationService, PoTableColumn, PoTableColumnSpacing, PoTableDetail, PoTableRowTemplateArrowDirection } from '@po-ui/ng-components';
+import { PoComponentsModule,PoModalComponent, PoNotificationService, PoTableColumn, PoTableColumnSpacing, PoTableComponent, PoTableDetail, PoTableRowTemplateArrowDirection } from '@po-ui/ng-components';
 import { FormsModule } from '@angular/forms';
 import { MonitorService } from '../../services/monitor.service';
 import { IntegracaoFilter } from '../../interfaces/integracao.interfaceFilter';
@@ -20,10 +20,14 @@ import { IntegracaoFilter } from '../../interfaces/integracao.interfaceFilter';
 export class MonitorComponent implements OnInit{
   @ViewChild('modalFilters', { static: true }) modalFilters?:PoModalComponent
   @ViewChild('modalParameter', { static: true }) modalParameter?:PoModalComponent
+  @ViewChild('listaIntegTable') listaIntegTable?:PoTableComponent
+  @ViewChild('tablePlanejadoSipDts') tablePlanejadoSipDts?:PoTableComponent
+  @ViewChild('tableMovimentacaoSipDts') tableMovimentacaoSipDts?:PoTableComponent 
+  
 
   loading:boolean = false
   integrations:any[] = []
-  retornoIntegracao?:string = ""
+  retornoIntegracao?:string
   tipoJson:string = "Json Enviado"
   jsonEnviado?:string
   jsonRetorno?:string
@@ -57,7 +61,7 @@ export class MonitorComponent implements OnInit{
   
   public readonly integracaoTableColumns: Array<PoTableColumn> = [
     { 
-      property: 'situacaoInteg', 
+      property: 'situacao', 
       label: 'Status Integração', 
       type: 'columnTemplate'
       //color: this.rowColor.bind(this) 
@@ -72,8 +76,8 @@ export class MonitorComponent implements OnInit{
 
   public readonly envPlanSipDts: Array<PoTableColumn> = [
     { 
-      property: 'situacaoRegra', 
-      label: 'Regra de Negócio', 
+      property: 'situacao', 
+      label: 'Status', 
       type: 'columnTemplate'
     },
     { property: 'emp', label: 'Empresa' },
@@ -93,8 +97,28 @@ export class MonitorComponent implements OnInit{
   ];
 
   public readonly envMovSipDts: Array<PoTableColumn> = [
-    { property: 'nome', label: 'nombre' },
-    { property: 'idade', label: 'anos' }
+    { 
+      property: 'situacao', 
+      label: 'Status', 
+      type: 'columnTemplate'
+    },
+    { property: 'emp', label: 'Empresa' },
+    { property: 'estab', label: 'Estabelecimento' },
+    { property: 'matricula', label: 'Matrícula' }, //funcionario
+    { property: 'nomeFuncionario', label: 'Nome Funcionário' },
+    { property: 'dataMarcacao', label: 'Data Marcação', type: "date" },
+    { property: 'horaMarcacao', label: 'Hora Marcação' },
+    { property: 'dataProcesso', label: 'Data Processo', type: "date" },
+    { property: 'tipoMovimentacao', label: 'Tipo Movimentação' },
+    { property: 'escala', label: 'Escala', type: 'number' },
+    { property: 'kdiario', label: 'KDiario' },
+    { property: 'tipoDia', label: 'Tipo Dia' },
+    { property: 'situacaoAfastamento', label: 'Situação Afastamento' },
+    { property: 'cid', label: 'CID' },
+    { property: 'crm', label: 'CRM' },
+    { property: 'entidade', label: 'Entidade' },
+    { property: 'ufEntidade', label: 'UF Entidade' },
+    { property: 'turno', label: 'Turno' },
   ];
 
   public readonly envMarCarolDtsIsp: Array<PoTableColumn> = [
@@ -134,17 +158,37 @@ export class MonitorComponent implements OnInit{
   }
 
   clickInIntegration(e:any){
-    console.log(this.integrations)
-    this.retornoIntegracao = e.retornoIntegracao
+    this.tablePlanejadoSipDts?.unselectRows()
+    this.tableMovimentacaoSipDts?.unselectRows()
+    this.retornoIntegracao = e.descricao
     this.jsonEnviado = JSON.parse(e.jsonEnviado)
     this.jsonRetorno = JSON.parse(e.jsonRetorno)
     
   }
 
   clickOutIntegration(){
-    this.retornoIntegracao = ""
+    this.retornoIntegracao = undefined
     this.jsonEnviado = undefined
     this.jsonRetorno = undefined
+  }
+
+  clickInDetail(e:any){
+    this.listaIntegTable?.unselectRows()
+    this.retornoIntegracao = e.descricao
+    this.jsonEnviado = undefined //JSON.parse(e.jsonEnviado)
+    this.jsonRetorno = undefined //JSON.parse(e.jsonRetorno)
+  }
+
+  clickOutDetail(){
+    this.retornoIntegracao = undefined
+    this.jsonEnviado = undefined
+    this.jsonRetorno = undefined
+  }
+
+  unselectAll(){
+    this.listaIntegTable?.unselectRows()
+    this.tablePlanejadoSipDts?.unselectRows()
+    this.tableMovimentacaoSipDts?.unselectRows()
   }
 
   numeraisIntegracao(tipo:number):number{
@@ -183,20 +227,11 @@ export class MonitorComponent implements OnInit{
   okFilter(){
     this.lastFilters = JSON.parse(JSON.stringify(this.filters))
     setTimeout(()=>{
-      //VALIDAÇÕES FILTRO
-      
-      const dataIniSplit = this.filters.dtIniIntegracao.toString().split("-")
-      const dataFimSplit = this.filters.dtFimIntegracao.toString().split("-")
-      
-      const dataLimite = new Date(Number(dataIniSplit[0]), Number(dataIniSplit[1]), Number(dataIniSplit[2]))      
-      const dataFim = new Date(Number(dataFimSplit[0]), Number(dataFimSplit[1]), Number(dataFimSplit[2]))      
+      //VALIDAÇÕES FILTRO     
 
-      dataLimite.setMonth(dataLimite.getMonth() + 3)      
-
-      if(dataFim > dataLimite){
-        this.notificationsService.error("Data da integração deve ter um intervalo de no máximo 3 meses.")
-      } else if(this.filters.dtIniIntegracao > this.filters.dtFimIntegracao){
-        this.notificationsService.error("Data da integração inicial deve ser menor que a data final.")
+      
+      if(!this.validaData(this.filters.dtIniIntegracao, this.filters.dtFimIntegracao, "Data de integração")){
+        return
       } else if(this.filters.horaIniIntegracao > this.filters.horaFimIntegracao){
         this.notificationsService.error("Hora da initegração inicial deve ser menor que a hora final")
       } else if(this.filters.empresaIni > this.filters.empresaFim) {
@@ -204,7 +239,11 @@ export class MonitorComponent implements OnInit{
       } else if(this.filters.estabelIni > this.filters.estabelFim){
         this.notificationsService.error("Codigo do estabelecimento inicial deve ser menor que codigo final")
       } else if(this.filters.matriculaIni > this.filters.matriculaFim){
-        this.notificationsService.error("Codigo da matricula inicial deve ser menor que codigo final")        
+        this.notificationsService.error("Codigo da matricula inicial deve ser menor que codigo final")
+      } else if(!this.validaData(this.filters.dataIniMarcacao, this.filters.dataFimMarcacao, "Data da marcação")) {
+        return
+      } else if(!this.validaData(this.filters.dataIniProcessoMarcacao, this.filters.dataFimProcessoMarcacao, "Data do processo")) {
+        return
       } else {
         if(this.firstSearch){
           this.firstSearch = false
@@ -213,9 +252,29 @@ export class MonitorComponent implements OnInit{
         this.loading = true
         this.getIntegrations()
         this.modalFilters?.close()
-      }     
+      }
         
     },100)
+  }
+
+  validaData(p_dataIni:Date, p_dataFim:Date, label:string = "Data"):boolean{
+      const dataIniSplit = p_dataIni.toString().split("-")
+      const dataFimSplit = p_dataFim.toString().split("-")
+      
+      const dataLimite = new Date(Number(dataIniSplit[0]), Number(dataIniSplit[1]), Number(dataIniSplit[2]))      
+      const dataFim = new Date(Number(dataFimSplit[0]), Number(dataFimSplit[1]), Number(dataFimSplit[2]))      
+
+      dataLimite.setMonth(dataLimite.getMonth() + 3)
+
+      if(dataFim > dataLimite){
+        this.notificationsService.error(`${label} deve ter um intervalo de no máximo 3 meses.`)
+        return false
+      } else if(p_dataIni > p_dataFim){
+        this.notificationsService.error(`${label} inicial deve ser menor que a data final.`)
+        return false
+      } else {
+        return true
+      }
   }
 
   cancelFilter(){

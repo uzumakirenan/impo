@@ -44,6 +44,7 @@
         
         <div #listaIntegContainer class="groupItem" style="flex: 2; padding: 0;">
             <po-table
+                #listaIntegTable
                 id="listaIntegTable"
                 [p-hide-action-fixed-columns]="false"
                 [p-hide-columns-manager]="true"
@@ -59,7 +60,7 @@
                 [p-columns]="integracaoTableColumns"
                 [p-items]="integrations"
             >
-                <ng-template p-table-column-template p-property="situacaoInteg" let-value style="max-width: 50px;">
+                <ng-template p-table-column-template p-property="situacao" let-value style="max-width: 50px;">
                     <div style="display: flex; align-items: center; justify-content: center;"> 
                         @if(value == "OK"){
                             <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>                        
@@ -78,82 +79,107 @@
                     let-i="rowIndex"
                     [p-table-row-template-arrow-direction]="directionTableTemplate"
                 >
-                    <div style="border: 1px solid #ccc; border-top: none;">
-
-                        @if(rowItem.tipo == "Envio Planejado SIP x Datasul"){
-                            <po-table
-                                id="detailPoTable"
-                                [p-hide-columns-manager]="true"
-                                [p-sort]="true"
-                                [p-striped]="true"
-                                [p-spacing]="spacingColumns"
-                                [p-selectable]="true"
-                                [p-single-select]="true"
-                    
-                                [p-columns]="envPlanSipDts"
-                                [p-items]="rowItem.detail"
-                            >
-                                <ng-template p-table-column-template p-property="situacaoRegra" let-value >
-                                    <div style="display: flex; align-items: center; justify-content: center;"> 
-                                        @if(value == "OK"){
-                                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
-                                        }
-                    
-                                        @else {
-                                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
-                                        }
-                                        
-                                    </div>
-                                </ng-template>
-                            </po-table>
+                        @if(rowItem.detail.length > 0){
+                            @if(rowItem.tipo == "Envio Planejado SIP x Datasul"){
+                                <div style="border: 1px solid #ccc; border-top: none;">
+                                    <po-table
+                                        #tablePlanejadoSipDts
+                                        id="detailPoTable"
+                                        [p-hide-columns-manager]="true"
+                                        [p-sort]="true"
+                                        [p-striped]="true"
+                                        [p-spacing]="spacingColumns"
+                                        [p-selectable]="true"
+                                        [p-single-select]="true"
+                                        (p-selected)="clickInDetail($event)"
+                                        (p-unselected)="clickOutDetail()"
+                            
+                                        [p-columns]="envPlanSipDts"
+                                        [p-items]="rowItem.detail"
+                                    >
+                                        <ng-template p-table-column-template p-property="situacao" let-value >
+                                            <div style="display: flex; align-items: center; justify-content: center;"> 
+                                                @if(value == "OK"){
+                                                    <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                                                }
+                            
+                                                @else {
+                                                    <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                                                }
+                                                
+                                            </div>
+                                        </ng-template>
+                                    </po-table>
+                                </div>
+                            }
+    
+                            @else if(rowItem.tipo == "Envio Movimentação SIP x Datasul"){
+                                <div style="border: 1px solid #ccc; border-top: none;">
+                                    <po-table
+                                        #tableMovimentacaoSipDts
+                                        id="detailPoTable"
+                                        [p-hide-columns-manager]="true"
+                                        [p-sort]="true"
+                                        [p-striped]="true"
+                                        [p-spacing]="spacingColumns"
+                                        [p-selectable]="true"
+                                        [p-single-select]="true"
+                                        (p-selected)="clickInDetail($event)"
+                                        (p-unselected)="clickOutDetail()"
+                            
+                                        [p-columns]="envMovSipDts"
+                                        [p-items]="rowItem.detail"
+                                    >
+                                        <ng-template p-table-column-template p-property="situacao" let-value >
+                                            <div style="display: flex; align-items: center; justify-content: center;"> 
+                                                @if(value == "OK"){
+                                                    <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                                                }
+                            
+                                                @else {
+                                                    <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                                                }
+                                                
+                                            </div>
+                                        </ng-template>
+                                    </po-table>
+                                </div>
+                            }
+    
+                            @else if(rowItem.tipo == "Envio Marcações Carol x Datasul/ISP"){
+                                <div style="border: 1px solid #ccc; border-top: none;">
+                                    <po-table
+                                        [p-hide-columns-manager]="true"
+                                        [p-sort]="true"
+                                        [p-striped]="true"
+                                        [p-spacing]="spacingColumns"
+                                        [p-selectable]="true"
+                                        [p-single-select]="true"
+                            
+                                        [p-columns]="envMovSipDts"
+                                        [p-items]="rowItem.detail"
+                                    >
+                                    </po-table>
+                                </div>
+                            }
+    
+                            @else if(rowItem.tipo == "Envio Marcações Cingo x SIP"){                            
+                                <div style="border: 1px solid #ccc; border-top: none;">
+                                    <po-table
+                                        [p-hide-columns-manager]="true"
+                                        [p-sort]="true"
+                                        [p-striped]="true"
+                                        [p-spacing]="spacingColumns"
+                                        [p-selectable]="true"
+                                        [p-single-select]="true"
+                            
+                                        [p-columns]="envMovSipDts"
+                                        [p-items]="rowItem.detail"
+                                    >
+                                    </po-table>
+                                </div>
+                            }
                         }
-
-                        @else if(rowItem.tipo == "Envio Movimentação SIP x Datasul"){
-                            <po-table
-                                [p-hide-columns-manager]="true"
-                                [p-sort]="true"
-                                [p-striped]="true"
-                                [p-spacing]="spacingColumns"
-                                [p-selectable]="true"
-                                [p-single-select]="true"
-                    
-                                [p-columns]="envMovSipDts"
-                                [p-items]="rowItem.detail"
-                            >
-                            </po-table>
-                        }
-
-                        @else if(rowItem.tipo == "Envio Marcações Carol x Datasul/ISP"){
-                            <po-table
-                                [p-hide-columns-manager]="true"
-                                [p-sort]="true"
-                                [p-striped]="true"
-                                [p-spacing]="spacingColumns"
-                                [p-selectable]="true"
-                                [p-single-select]="true"
-                    
-                                [p-columns]="envMarCarolDtsIsp"
-                                [p-items]="rowItem.detail"
-                            >
-                            </po-table>
-                        }
-
-                        @else if(rowItem.tipo == "Envio Marcações Cingo x SIP"){                            
-                            <po-table
-                                [p-hide-columns-manager]="true"
-                                [p-sort]="true"
-                                [p-striped]="true"
-                                [p-spacing]="spacingColumns"
-                                [p-selectable]="true"
-                                [p-single-select]="true"
-                    
-                                [p-columns]="envMarCingoSip"
-                                [p-items]="rowItem.detail"
-                            >
-                            </po-table>
-                        }
-
-                    </div>
                 </ng-template>
             </po-table>
         </div>
@@ -176,7 +202,7 @@
         </div>
         
         <div style="flex: 1; display: flex; gap: 10px; position: relative;">
-            <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Retorno da regra de negócio</span>
+            <span style="position: absolute; left: 10px; top: 5px; font-weight: 600;">Mensagem</span>
 
             <div class="groupItem" style="flex: 1; overflow-y: hidden; padding-top: 40px;">
                 <textarea style="border: none; width: 100%; height: 100%; resize:none; overflow-y: scroll;" readonly>{{retornoIntegracao | json}}</textarea>
@@ -249,6 +275,21 @@
 <!-- FILTROS -->
 <po-modal #modalFilters p-title="Filtros">
     <po-container>
+        <div class="po-row po-mb-1">
+            <po-select class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                [ngModel]="filters.statusIntegracao"
+                (ngModelChange)="filters.statusIntegracao = $event"
+                name="Status"
+                p-label="Status"
+                [p-options]="
+                    [
+                        { label: 'TODOS', value: 'TODOS' },
+                        { label: 'OK', value: 'OK' },
+                        { label: 'ERRO', value: 'ERRO' }
+                    ]"                
+            ></po-select>
+        </div>
+
         <div class="po-row">
             <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
                 [(ngModel)]="filters.dtIniIntegracao"
@@ -279,21 +320,6 @@
                 [p-maxlength]="8"
                 p-placeholder="ZZZZZZZZ"
             ></po-input>
-        </div>
-
-        <div class="po-row po-mb-1">
-            <po-select class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                [ngModel]="filters.statusIntegracao"
-                (ngModelChange)="filters.statusIntegracao = $event"
-                name="Status"
-                p-label="Status"
-                [p-options]="
-                    [
-                        { label: 'TODOS', value: 'TODOS' },
-                        { label: 'OK', value: 'OK' },
-                        { label: 'ERRO', value: 'ERRO' }
-                    ]"                
-            ></po-select>
         </div>
 
         <div class="po-row po-mb-1">
@@ -352,39 +378,142 @@
                 p-placeholder="999999999"
             ></po-input>
         </div>
-
-        <div class="po-row">
-            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                [(ngModel)]="filters.dtIniIntegracao"
-                p-label="Data da marcação"
-                p-format="dd/mm/yyyy"
-                p-placeholder="01/01/0001"></po-datepicker>
-    
-            <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                [(ngModel)]="filters.dtFimIntegracao"
-                p-label=" "                
-                p-placeholder="31/12/9999"></po-datepicker>
-        </div>
-
-        <div class="po-row po-mb-1">
-            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                [(ngModel)]="filters.horaIniIntegracao"
-                p-label="Hora da marcação"
-                p-mask="99:99:99"
-                p-mask-format-model="true"
-                [p-maxlength]="8"
-            ></po-input>
-    
-            <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                [(ngModel)]="filters.horaFimIntegracao"
-                p-label=" "
-                p-mask="99:99:99"
-                p-mask-format-model="true"
-                [p-maxlength]="8"
-                p-placeholder="ZZZZZZZZ"
-            ></po-input>
-        </div>
     </po-container>
+
+    @if(filters.planejadoSipDts){
+        <br/>
+        <po-container>
+            <div class="po-row">
+                <span>Planejado SIP x DTS</span>
+            </div>
+            <div class="po-row">
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dtIniIntegracao"
+                    p-label="Data da marcação"
+                    p-format="dd/mm/yyyy"
+                    p-placeholder="01/01/0001"></po-datepicker>
+        
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dtFimIntegracao"
+                    p-label=" "                
+                    p-placeholder="31/12/9999"></po-datepicker>
+            </div>
+    
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.horaIniIntegracao"
+                    p-label="Hora da marcação"
+                    p-mask="99:99:99"
+                    p-mask-format-model="true"
+                    [p-maxlength]="8"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.horaFimIntegracao"
+                    p-label=" "
+                    p-mask="99:99:99"
+                    p-mask-format-model="true"
+                    [p-maxlength]="8"
+                    p-placeholder="ZZZZZZZZ"
+                ></po-input>
+            </div>
+        </po-container>
+    }
+
+    @if(filters.movimentacaoSipDts){
+        <br/>
+        <po-container>
+            <div class="po-row">
+                <span>Movimentação SIP x DTS</span>
+            </div>
+            <div class="po-row">
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataIniMarcacao"
+                    p-label="Data da marcação"
+                    p-format="dd/mm/yyyy"
+                    p-placeholder="01/01/0001"></po-datepicker>
+        
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataFimMarcacao"
+                    p-label=" "                
+                    p-placeholder="31/12/9999"></po-datepicker>
+            </div>
+    
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.horaIniMarcacao"
+                    p-label="Hora da marcação"
+                    p-mask="99:99:99"
+                    p-mask-format-model="true"
+                    [p-maxlength]="8"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.horaFimMarcacao"
+                    p-label=" "
+                    p-mask="99:99:99"
+                    p-mask-format-model="true"
+                    [p-maxlength]="8"
+                    p-placeholder="ZZZZZZZZ"
+                ></po-input>
+            </div>
+
+            <div class="po-row">
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataIniProcessoMarcacao"
+                    p-label="Data do Processo"
+                    p-format="dd/mm/yyyy"
+                    p-placeholder="01/01/0001"></po-datepicker>
+        
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataFimProcessoMarcacao"
+                    p-label=" "                
+                    p-placeholder="31/12/9999"></po-datepicker>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.tipoMovimentacaoMarcacao"
+                    p-label="Tipo Movimentação"
+                    [p-maxlength]="10"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.turnoMarcacao"
+                    p-label="Turno"
+                    [p-maxlength]="10"
+                ></po-input>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.tipoDeDiaMarcacao"
+                    p-label="Tipo de dia"
+                    [p-maxlength]="10"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.situacaoAfastamento"
+                    p-label="Situação de afastamento"
+                    [p-maxlength]="10"
+                ></po-input>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.cidMarcacao"
+                    p-label="CID"
+                    [p-maxlength]="10"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.crmMarcacao"
+                    p-label="CRM"
+                    [p-maxlength]="10"
+                ></po-input>
+            </div>
+        </po-container>
+    }
 
     <po-modal-footer [p-disabled-align]="false">
         <po-button p-label="Resetar Filtros" (p-click)="resetFilters()"> </po-button>
