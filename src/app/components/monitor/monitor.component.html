@@ -14,6 +14,10 @@
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <div style="width: 25px; height: 25px; border-radius: 50px;" [class]="pasoeIsConnected"></div>
                 
+                @if(pasoeIsConnected == "pasoeConnecting"){
+                    <p><strong>PASOE - Tentando conectar </strong></p>
+                }
+
                 @if(pasoeIsConnected == "pasoeON"){
                     <p><strong>PASOE Conectado</strong></p>
                 }
@@ -598,7 +602,7 @@
         <div class="po-row">
             <po-checkbox [(ngModel)]="filters.planejadoSipDts" p-label="Envio Planejado SIP x Datasul" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
             <po-checkbox [(ngModel)]="filters.movimentacaoSipDts" p-label="Envio Movimentação SIP x Datasul" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
-            <po-checkbox [(ngModel)]="filters.marcacoesCarolDtsSip" p-label="Envio Marcações Carol x Datasul/ISP" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
+            <po-checkbox [(ngModel)]="filters.marcacoesCarolDtsSip" p-label="Envio Marcações Carol x Datasul/SIP" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
             <po-checkbox [(ngModel)]="filters.marcacoesCingoSip" p-label="Envio Marcações Cingo x SIP" class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"></po-checkbox>
         </div>
     </po-container>

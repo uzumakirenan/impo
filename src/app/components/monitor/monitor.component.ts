@@ -35,7 +35,7 @@ export class MonitorComponent implements OnInit{
   jsonRetorno?:string
   filters:IntegracaoFilter = new IntegracaoFilter()
   lastFilters?:IntegracaoFilter
-  pasoeIsConnected:string = "pasoeON"
+  pasoeIsConnected:string = "pasoeConnecting" //"pasoeON"
   bancosDesconectados:string = ""
   autoRefreshSwitch:boolean = true
   intervalAutoRefresh?:any

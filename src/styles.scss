@@ -55,6 +55,11 @@
     padding: 10px;
 }
 
+.pasoeConnecting {
+    background: linear-gradient(white, yellow);
+    border: 1px solid linear-gradient(yellow, white);
+}
+
 .pasoeON {
     background: linear-gradient(lightgreen, green);
     border: 1px solid linear-gradient(green, lightgreen);
@@ -92,7 +97,7 @@
 /******************************* MODIFICAÇÕES POUI *******************************/
 
 //Congelar colunas tabela pai e detalhes
-/*
+
 #listaIntegTable table {
     position: relative;
 }
@@ -114,7 +119,7 @@
 #detailPoTable td:nth-child(2), #detailPoTable th:nth-child(2){
     position: sticky !important; left: 0px !important;
 }
-    */
+    
 
 /* Zebrar tabela detalhe inativando a herança */
 #detailPoTable td:nth-child(3), #detailPoTable th:nth-child(3){
