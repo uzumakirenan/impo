@@ -20,9 +20,11 @@ import { IntegracaoFilter } from '../../interfaces/integracao.interfaceFilter';
 export class MonitorComponent implements OnInit{
   @ViewChild('modalFilters', { static: true }) modalFilters?:PoModalComponent
   @ViewChild('modalParameter', { static: true }) modalParameter?:PoModalComponent
+  @ViewChild('modalMarcacoes', { static: true }) modalMarcacoes?:PoModalComponent
   @ViewChild('listaIntegTable') listaIntegTable?:PoTableComponent
   @ViewChild('tablePlanejadoSipDts') tablePlanejadoSipDts?:PoTableComponent
   @ViewChild('tableMovimentacaoSipDts') tableMovimentacaoSipDts?:PoTableComponent 
+  @ViewChild('tableMarcacaoCarolDtsSip') tableMarcacaoCarolDtsSip?:PoTableComponent
   
 
   loading:boolean = false
@@ -42,6 +44,7 @@ export class MonitorComponent implements OnInit{
   ultimosRegistros:number = 0
   novosRegistros:number = 0
   totalNovosRegistros:number = 0
+  marcacoes:any[] = []
 
   constructor(
     private monitorService: MonitorService,
@@ -69,9 +72,9 @@ export class MonitorComponent implements OnInit{
     { property: 'tipo', label: 'Tipo da integração' },
     { property: 'dtIntegracao', label: 'Data Integração', type: "date" },
     { property: 'horaIniIntegracao', label: 'Hr Ini. Integração' },
+    { property: 'horaFimIntegracao', label: 'Hora Fim Integração' },
     { property: 'horaIniApiDts', label: 'Hora Ini Api Dts' },
-    { property: 'horaFimApiDts', label: 'Hora Fim Api Dts' },
-    { property: 'horaFimIntegracao', label: 'Hora Fim Integração' }    
+    { property: 'horaFimApiDts', label: 'Hora Fim Api Dts' }
   ];
 
   public readonly envPlanSipDts: Array<PoTableColumn> = [
@@ -122,13 +125,33 @@ export class MonitorComponent implements OnInit{
   ];
 
   public readonly envMarCarolDtsIsp: Array<PoTableColumn> = [
-    { property: 'nome', label: 'Nome' },
-    { property: 'idade', label: 'Idade' }
+    { 
+      property: 'situacao', 
+      label: 'Status', 
+      type: 'columnTemplate'
+    },
+    { property: 'emp', label: 'Empresa' },
+    { property: 'estab', label: 'Estabelecimento' },
+    { property: 'matricula', label: 'Matrícula' }, //funcionario
+    { property: 'nomeFuncionario', label: 'Nome Funcionário' },
+    { property: 'cpf', label: 'CPF' },
+    { property: 'dataProcesso', label: 'Data Processo', type: "date" },
+    { 
+      property: 'onTimeInfo', 
+      label: 'Marcações (Batidas)', 
+      type: "columnTemplate" 
+    },
+    
   ];
 
   public readonly envMarCingoSip: Array<PoTableColumn> = [
     { property: 'nome', label: 'Nome' },
     { property: 'idade', label: 'Idade' }
+  ];
+
+  public readonly columnMarcacoes: Array<PoTableColumn> = [
+    { property: 'dataBatida', label: 'Data' },
+    { property: 'conteudo', label: 'Hora' }
   ];
 
   cancelRequest(){
@@ -160,6 +183,7 @@ export class MonitorComponent implements OnInit{
   clickInIntegration(e:any){
     this.tablePlanejadoSipDts?.unselectRows()
     this.tableMovimentacaoSipDts?.unselectRows()
+    this.tableMarcacaoCarolDtsSip?.unselectRows()
     this.retornoIntegracao = e.descricao
     this.jsonEnviado = JSON.parse(e.jsonEnviado)
     this.jsonRetorno = JSON.parse(e.jsonRetorno)
@@ -189,6 +213,7 @@ export class MonitorComponent implements OnInit{
     this.listaIntegTable?.unselectRows()
     this.tablePlanejadoSipDts?.unselectRows()
     this.tableMovimentacaoSipDts?.unselectRows()
+    this.tableMarcacaoCarolDtsSip?.unselectRows()
   }
 
   numeraisIntegracao(tipo:number):number{
@@ -240,10 +265,6 @@ export class MonitorComponent implements OnInit{
         this.notificationsService.error("Codigo do estabelecimento inicial deve ser menor que codigo final")
       } else if(this.filters.matriculaIni > this.filters.matriculaFim){
         this.notificationsService.error("Codigo da matricula inicial deve ser menor que codigo final")
-      } else if(!this.validaData(this.filters.dataIniMarcacao, this.filters.dataFimMarcacao, "Data da marcação")) {
-        return
-      } else if(!this.validaData(this.filters.dataIniProcessoMarcacao, this.filters.dataFimProcessoMarcacao, "Data do processo")) {
-        return
       } else {
         if(this.firstSearch){
           this.firstSearch = false
@@ -307,6 +328,19 @@ export class MonitorComponent implements OnInit{
       this.filters = this.lastFilters = JSON.parse(JSON.stringify(this.lastFilters))
     }
     this.modalParameter?.close()
+  }
+
+  openModalMarcacoes(e:string){
+    this.marcacoes = []
+    const marcacoesJson = JSON.parse(e.replaceAll("-", "/"))
+    this.marcacoes = marcacoesJson
+
+    this.modalMarcacoes?.open()
+  }
+
+  okModalMarcacoes(){
+    this.marcacoes = []
+    this.modalMarcacoes?.close()
   }
 
   getStatusPasoe(){

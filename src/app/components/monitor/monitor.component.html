@@ -146,19 +146,43 @@
                                 </div>
                             }
     
-                            @else if(rowItem.tipo == "Envio Marcações Carol x Datasul/ISP"){
+                            @else if(rowItem.tipo == "Envio Marcações Carol x Datasul/SIP"){
                                 <div style="border: 1px solid #ccc; border-top: none;">
                                     <po-table
+                                        #tableMarcacaoCarolDtsSip
+                                        id="detailPoTable"
                                         [p-hide-columns-manager]="true"
                                         [p-sort]="true"
                                         [p-striped]="true"
                                         [p-spacing]="spacingColumns"
                                         [p-selectable]="true"
                                         [p-single-select]="true"
+                                        (p-selected)="clickInDetail($event)"
+                                        (p-unselected)="clickOutDetail()"
                             
-                                        [p-columns]="envMovSipDts"
+                                        [p-columns]="envMarCarolDtsIsp"
                                         [p-items]="rowItem.detail"
                                     >
+                                        <ng-template p-table-column-template p-property="situacao" let-value >
+                                            <div style="display: flex; align-items: center; justify-content: center;"> 
+                                                @if(value == "OK"){
+                                                    <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>
+                                                }
+                            
+                                                @else {
+                                                    <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                                                }
+                                                
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template p-table-column-template p-property="onTimeInfo" let-value >
+                                            <div style="display: flex; align-items: center; justify-content: center;">
+                                                <div (click)="openModalMarcacoes(value)" style="font-size: 1.5rem;">
+                                                    <po-icon p-icon="po-icon-calendar" style="color: var(--color-01); cursor: pointer;"></po-icon>
+                                                </div>
+                                            </div>
+                                        </ng-template>
                                     </po-table>
                                 </div>
                             }
@@ -179,6 +203,14 @@
                                     </po-table>
                                 </div>
                             }
+                        }
+
+                        @else {
+                            <div style="position: relative; min-height: 24px; width: 100%;">
+                                <div style="position: absolute; left: -8px; top: -8px; width: calc(100% + 16px); min-height: 40px; display: flex; align-items: center; padding: 0px 10px;">
+                                    <strong>Nenhuma Integração para exibir.</strong>
+                                </div>
+                            </div>
                         }
                 </ng-template>
             </po-table>
@@ -388,33 +420,70 @@
             </div>
             <div class="po-row">
                 <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                    [(ngModel)]="filters.dtIniIntegracao"
-                    p-label="Data da marcação"
+                    [(ngModel)]="filters.dataIniCalendarioPla"
+                    p-label="Data Calendário"
                     p-format="dd/mm/yyyy"
                     p-placeholder="01/01/0001"></po-datepicker>
         
                 <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                    [(ngModel)]="filters.dtFimIntegracao"
+                    [(ngModel)]="filters.dataFimCalendarioPla"
                     p-label=" "                
                     p-placeholder="31/12/9999"></po-datepicker>
             </div>
     
             <div class="po-row po-mb-1">
                 <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                    [(ngModel)]="filters.horaIniIntegracao"
-                    p-label="Hora da marcação"
-                    p-mask="99:99:99"
-                    p-mask-format-model="true"
+                    [(ngModel)]="filters.escalaIniPla"
+                    p-label="Escala"
                     [p-maxlength]="8"
                 ></po-input>
         
                 <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
-                    [(ngModel)]="filters.horaFimIntegracao"
+                    [(ngModel)]="filters.escalaFimPla"
                     p-label=" "
-                    p-mask="99:99:99"
-                    p-mask-format-model="true"
                     [p-maxlength]="8"
-                    p-placeholder="ZZZZZZZZ"
+                ></po-input>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.kdiarioIniPla"
+                    p-label="Kdiario"
+                    [p-maxlength]="8"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.kdiarioFimPla"
+                    p-label=" "
+                    [p-maxlength]="8"
+                ></po-input>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.sindicatoIniPla"
+                    p-label="Sindicato"
+                    [p-maxlength]="8"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.sindicatoFimPla"
+                    p-label=" "
+                    [p-maxlength]="8"
+                ></po-input>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.postoIniPla"
+                    p-label="Posto"
+                    [p-maxlength]="8"
+                ></po-input>
+        
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.postoFimPla"
+                    p-label=" "
+                    [p-maxlength]="8"
                 ></po-input>
             </div>
         </po-container>
@@ -541,3 +610,25 @@
 
 </po-modal>
 
+<po-modal #modalMarcacoes p-title="Marcações (Batidas)" [p-hide-close]="true">
+    <po-container>
+        <div class="po-row">
+            <po-table style="width: 100%;"
+                #tableMarcacaoDetail
+                [p-hide-columns-manager]="true"
+                [p-sort]="true"
+                [p-striped]="true"
+                [p-spacing]="spacingColumns"
+                [p-selectable]="true"
+                [p-single-select]="true"
+    
+                [p-columns]="columnMarcacoes"
+                [p-items]="marcacoes"
+            ></po-table>
+        </div>
+    </po-container>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-label="OK" (p-click)="okModalMarcacoes()"> </po-button>
+    </po-modal-footer>
+</po-modal>

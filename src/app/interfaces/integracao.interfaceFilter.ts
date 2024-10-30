@@ -17,13 +17,23 @@ export class IntegracaoFilter {
     matriculaIni:string = "0"
     matriculaFim:string = "999999999"
     //Filtros Planejado SIP x DTS
+    dataIniCalendarioPla?:Date
+    dataFimCalendarioPla?:Date
+    escalaIniPla:string = ""
+    escalaFimPla:string = "ZZZZZZZZ"
+    kdiarioIniPla:string = ""
+    kdiarioFimPla:string = "ZZZZZZZZ"
+    sindicatoIniPla:string = ""
+    sindicatoFimPla:string = "ZZZZZZZZ"
+    postoIniPla:string = ""
+    postoFimPla:string = "ZZZZZZZZ"
     //Filtros Movimentação SIP x DTS
-    dataIniMarcacao:Date = dataLimite
-    dataFimMarcacao:Date = dataAtual
+    dataIniMarcacao?:Date
+    dataFimMarcacao?:Date
     horaIniMarcacao:string = "00:00:00"
     horaFimMarcacao:string = "23:59:59"
-    dataIniProcessoMarcacao:Date = dataLimite
-    dataFimProcessoMarcacao:Date = dataAtual
+    dataIniProcessoMarcacao?:Date
+    dataFimProcessoMarcacao?:Date
     tipoMovimentacaoMarcacao:string = ""
     turnoMarcacao:string = ""
     tipoDeDiaMarcacao:string = ""
