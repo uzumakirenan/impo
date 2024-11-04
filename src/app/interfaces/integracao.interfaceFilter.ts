@@ -11,9 +11,9 @@ export class IntegracaoFilter {
     horaFimIntegracao:string = "23:59:59"
     statusIntegracao:string = "TODOS"
     empresaIni:string = "0"
-    empresaFim:string = "999"
+    empresaFim:string = "99999999"
     estabelIni:string = "0"
-    estabelFim:string = "999"
+    estabelFim:string = "99999999"
     matriculaIni:string = "0"
     matriculaFim:string = "999999999"
     //Filtros Planejado SIP x DTS

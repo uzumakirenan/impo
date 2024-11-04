@@ -185,8 +185,16 @@ export class MonitorComponent implements OnInit{
     this.tableMovimentacaoSipDts?.unselectRows()
     this.tableMarcacaoCarolDtsSip?.unselectRows()
     this.retornoIntegracao = e.descricao
-    this.jsonEnviado = JSON.parse(e.jsonEnviado)
-    this.jsonRetorno = JSON.parse(e.jsonRetorno)
+
+    if(e.situacao == "ERRO"){
+      this.jsonEnviado = e.jsonEnviado
+      this.jsonRetorno = e.jsonRetorno
+    }
+
+    else {
+      this.jsonEnviado = JSON.parse(e.jsonEnviado)
+      this.jsonRetorno = JSON.parse(e.jsonRetorno)
+    }
     
   }
 
