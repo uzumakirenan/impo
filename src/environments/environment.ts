@@ -1,6 +1,6 @@
 export const environment = {
     env:'prod',
-    url:'http://172.20.32.47:8080/api/impo/v1/',
+    url:'http://172.20.32.22:8080/api/impo/v1/',
 };
 
 /* Base Produção */
