@@ -302,7 +302,7 @@
         <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" (p-click)="openParameter()" p-icon="po-icon-settings" title="Parâmetros"></po-button>
         <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" (p-click)="openFilter()" p-icon="po-icon-filter" title="Filtros"></po-button>
         <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" [p-disabled]="firstSearch" (p-click)="refresh()" p-icon="po-icon-refresh" title="Atualizar"></po-button>
-        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" p-icon="po-icon-doc-xls" title="Exportar para Excel"></po-button>
+        <po-button class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mb-1" [p-disabled]="!(integrations.length > 0)" (p-click)="modalExportExcel.open()" p-icon="po-icon-doc-xls" title="Exportar para Excel"></po-button>
     </div>
 </div>
 
@@ -617,7 +617,7 @@
 
 <po-modal #modalMarcacoes p-title="Marcações (Batidas)" [p-hide-close]="true">
     <po-container>
-        <div class="po-row">
+        <div class="po-row" class="po-xl-12 po-lg-12 po-md-12 po-sm-12">
             <po-table style="width: 100%;"
                 #tableMarcacaoDetail
                 [p-hide-columns-manager]="true"
@@ -635,5 +635,28 @@
 
     <po-modal-footer [p-disabled-align]="false">
         <po-button p-label="OK" (p-click)="okModalMarcacoes()"> </po-button>
+    </po-modal-footer>
+</po-modal>
+
+
+<po-modal #modalExportExcel p-title="Exporta para Excel" [p-hide-close]="true">
+    <po-container>
+        <div class="po-row" class="po-xl-12 po-lg-12 po-md-12 po-sm-12">
+            <po-button class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"
+                p-label="Envio Planejado" [p-disabled]="!filters.planejadoSipDts" (p-click)="exportExcel(integrations, 'Envio Planejado SIP x Datasul')"></po-button>
+
+            <po-button class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"
+                p-label="Envio Movimentação" [p-disabled]="!filters.movimentacaoSipDts" (p-click)="exportExcel(integrations, 'Envio Movimentação SIP x Datasul')"></po-button>
+
+            <po-button class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"
+                p-label="Envio Carol" [p-disabled]="!filters.marcacoesCarolDtsSip" (p-click)="exportExcel(integrations, 'Envio Marcações Carol x Datasul/SIP')"></po-button>
+
+            <po-button class="po-xl-6 po-lg-6 po-md-6 po-sm-12 po-mb-1"
+                p-label="Envio Cingo" [p-disabled]="!filters.marcacoesCingoSip" (p-click)="exportExcel(integrations, 'Envio Marcações Cingo x SIP')"></po-button>
+        </div>
+    </po-container>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-label="Fechar" (p-click)="modalExportExcel.close()"> </po-button>
     </po-modal-footer>
 </po-modal>

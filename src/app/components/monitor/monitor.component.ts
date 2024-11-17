@@ -4,6 +4,7 @@ import { PoComponentsModule,PoModalComponent, PoNotificationService, PoTableColu
 import { FormsModule } from '@angular/forms';
 import { MonitorService } from '../../services/monitor.service';
 import { IntegracaoFilter } from '../../interfaces/integracao.interfaceFilter';
+import * as XLSX from 'xlsx-js-style'
 
 @Component({
   selector: 'app-monitor',
@@ -21,11 +22,11 @@ export class MonitorComponent implements OnInit{
   @ViewChild('modalFilters', { static: true }) modalFilters?:PoModalComponent
   @ViewChild('modalParameter', { static: true }) modalParameter?:PoModalComponent
   @ViewChild('modalMarcacoes', { static: true }) modalMarcacoes?:PoModalComponent
+  @ViewChild('modalExportExcel', { static: true }) modalExportExcel?:PoModalComponent
   @ViewChild('listaIntegTable') listaIntegTable?:PoTableComponent
   @ViewChild('tablePlanejadoSipDts') tablePlanejadoSipDts?:PoTableComponent
   @ViewChild('tableMovimentacaoSipDts') tableMovimentacaoSipDts?:PoTableComponent 
-  @ViewChild('tableMarcacaoCarolDtsSip') tableMarcacaoCarolDtsSip?:PoTableComponent
-  
+  @ViewChild('tableMarcacaoCarolDtsSip') tableMarcacaoCarolDtsSip?:PoTableComponent  
 
   loading:boolean = false
   integrations:any[] = []
@@ -415,5 +416,267 @@ export class MonitorComponent implements OnInit{
     a.download = fileName + ".json";
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  exportExcel(data:any, tipo:string){
+    const dataArray = data.filter((item:any) => item.tipo == tipo)
+
+    console.log(data)
+    console.log(dataArray)
+
+    const styleBorderAll = {
+      left: {
+        style: "thin", 
+        color: { rgb: "000000"}
+      }, 
+      top: {
+        style: "thin", 
+        color: { rgb: "000000"}
+      }, 
+      right: {
+        style: "thin", 
+        color: { rgb: "000000"}
+      }, 
+      bottom: {
+        style: "thin", 
+        color: { rgb: "000000"}
+      }
+    }
+
+    const dados = [];
+    const cabecalhoIntegracao = [
+      { v: 'Status Integração',     t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Tipo de Integração',    t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Data Integração',       t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Hora Ini Integração',   t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Hora Fim Integração',   t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Hora Ini Api Datasul',  t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } },
+      { v: 'Hora Fim Api Datasul',  t: 's', s: { border: styleBorderAll, font: { bold: true }, fill: { fgColor: { rgb: "E9E9E9" } } } }
+    ]    
+
+    dados.push(cabecalhoIntegracao);
+    
+    dataArray.forEach((dado:any, idxInteg:any) => {
+      if((dataArray.length - 1) === idxInteg){
+        dados.push([
+          { v: dado.situacao.situacao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },      
+          { v: dado.tipo, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: new Date(dado.dtIntegracao).toLocaleDateString(), t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaIniIntegracao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaFimIntegracao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaIniApiDts, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, }, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaFimApiDts, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, bottom: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+        ]);
+      } else {
+        dados.push([
+          { v: dado.situacao.situacao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },      
+          { v: dado.tipo, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: new Date(dado.dtIntegracao).toLocaleDateString(), t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaIniIntegracao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaFimIntegracao, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaIniApiDts, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+          { v: dado.horaFimApiDts, t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, fill: { fgColor: { rgb: "e3e9f7" } } } },
+        ]);
+      }
+      
+
+      if(dado.detail.length > 0){ //e3f7ea
+        if(tipo == "Envio Planejado SIP x Datasul"){
+          dados.push([
+            { v: "", t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}}, 
+            { v: 'Status', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Empresa', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Calendário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Descrição', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Sindicato', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Posto', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
+            ]
+          )
+
+          dado.detail.forEach((detail:any, idx:any) => {
+            if((dado.detail.length - 1) === idx){
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.dataCalendario ? detail.dataCalendario : "",
+                { v: detail.descricao ? detail.descricao : "",           t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.escala ? detail.escala : "",           t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.kdiario ? detail.kdiario : "",          t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.tipoDia ? detail.tipoDia : "",          t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.inicioJornada1 ? new Date(detail.inicioJornada1).toLocaleString() : "",   t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.fimJornada1 ? new Date(detail.fimJornada1).toLocaleString() : "",      t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.inicioJoranada2 ? new Date(detail.inicioJoranada2).toLocaleString() : "",  t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.fimJoranada2 ? new Date(detail.fimJoranada2).toLocaleString() : "",     t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.sindicato ? detail.sindicato : "",        t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.posto ? detail.posto : "",            t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ])
+            } else {
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.dataCalendario ? detail.dataCalendario : "", 
+                detail.descricao ? detail.descricao : "",
+                detail.escala ? detail.escala : "", 
+                detail.kdiario ? detail.kdiario : "", 
+                detail.tipoDia ? detail.tipoDia : "", 
+                detail.inicioJornada1 ? new Date(detail.inicioJornada1).toLocaleString() : "", 
+                detail.fimJornada1 ? new Date(detail.fimJornada1).toLocaleString() : "", 
+                detail.inicioJoranada2 ? new Date(detail.inicioJoranada2).toLocaleString() : "", 
+                detail.fimJoranada2 ? new Date(detail.fimJoranada2).toLocaleString() : "", 
+                detail.sindicato ? detail.sindicato : "",
+                { v: detail.posto ? detail.posto : "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ]) 
+            }           
+          })
+        }
+
+        if(tipo == "Envio Movimentação SIP x Datasul"){
+          dados.push([
+            { v: "", t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}}, 
+            { v: 'Status', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Empresa', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Marcação', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Hora Marcação', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Processo', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Descrição', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Tipo Movimentação', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Situação Afastamento', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'CID', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'CRM', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Entidade', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'UF Entidade', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Turno', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
+            ]
+          )
+
+          dado.detail.forEach((detail:any, idx:any) => {
+            if((dado.detail.length - 1) === idx){
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.dataMarcacao ? new Date(detail.dataMarcacao).toLocaleDateString() : "",
+                { v: detail.horaMarcacao ? detail.horaMarcacao : "",           t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.dataProcesso ? new Date(detail.dataProcesso).toLocaleDateString() : "",           t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.descricao ? detail.descricao : "",           t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.tipoMovimentacao ? detail.tipoMovimentacao : "",          t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.escala ? detail.escala : "",          t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.kdiario ? detail.kdiario : "",   t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.tipoDia ? detail.tipoDia : "",      t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.situacaoAfastamento ? detail.situacaoAfastamento : "",  t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.cid ? detail.cid : "",     t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.crm ? detail.crm : "",        t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.entidade ? detail.entidade : "",        t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.ufEntidade ? detail.ufEntidade : "",        t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: detail.turno ? detail.turno : "",            t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ])
+            } else {
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.dataMarcacao ? new Date(detail.dataMarcacao).toLocaleDateString() : "",
+                detail.horaMarcacao ? detail.horaMarcacao : "",
+                detail.dataProcesso ? new Date(detail.dataProcesso).toLocaleDateString() : "", 
+                detail.descricao ? detail.descricao : "",
+                detail.tipoMovimentacao ? detail.tipoMovimentacao : "",
+                detail.escala ? detail.escala : "",
+                detail.kdiario ? detail.kdiario : "",
+                detail.tipoDia ? detail.tipoDia : "",
+                detail.situacaoAfastamento ? detail.situacaoAfastamento : "",
+                detail.cid ? detail.cid : "", 
+                detail.crm ? detail.crm : "",
+                detail.entidade ? detail.entidade : "", 
+                detail.ufEntidade ? detail.ufEntidade : "",  
+                { v: detail.turno ? detail.turno : "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ]) 
+            }           
+          })
+        }
+        
+        if(tipo == "Envio Marcações Carol x Datasul/SIP"){
+          dados.push([
+            { v: "", t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}}, 
+            { v: 'Status', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Empresa', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Calendário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Sindicato', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Posto', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
+            ]
+          )
+        }
+
+        if(tipo == "Envio Marcações Cingo x SIP"){
+          dados.push([
+            { v: "", t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}}, 
+            { v: 'Status', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Empresa', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Calendário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Ini Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Fim Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Sindicato', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Posto', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
+            ]
+          )
+        }
+      }
+      
+    });
+    
+    const workbook = XLSX.utils.book_new();
+    
+    const worksheet = XLSX.utils.aoa_to_sheet(dados);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
+
+    XLSX.writeFile(workbook, 'planilha_env_planejado.xlsx');
+    
   }
 }
