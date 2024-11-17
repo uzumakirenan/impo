@@ -65,13 +65,20 @@
                 [p-items]="integrations"
             >
                 <ng-template p-table-column-template p-property="situacao" let-value style="max-width: 50px;">
-                    <div style="display: flex; align-items: center; justify-content: center;"> 
-                        @if(value == "OK"){
-                            <po-tag [p-value]="value" p-color="green" p-text-color="white"> </po-tag>                        
+                    <div style="display: flex; align-items: center; justify-content: center; position: relative;"> 
+                        @if(value.situacao == "OK"){
+                            <po-tag [p-value]="value.situacao" p-color="green" p-text-color="white"> </po-tag>
+                            @if(value.qtdFilhos > 0){
+                                <po-badge
+                                    style="position: absolute; left: calc(50% + 12px); top: 0px"
+                                    p-color="color-05"
+                                    [p-value]="value.qtdFilhos"
+                                ></po-badge>
+                            }
                         }
     
                         @else {
-                            <po-tag [p-value]="value" p-color="red" p-text-color="white"> </po-tag>  
+                            <po-tag [p-value]="value.situacao" p-color="red" p-text-color="white"> </po-tag>
                         }
                         
                     </div>
@@ -181,10 +188,18 @@
                                         </ng-template>
 
                                         <ng-template p-table-column-template p-property="onTimeInfo" let-value >
-                                            <div style="display: flex; align-items: center; justify-content: center;">
-                                                <div (click)="openModalMarcacoes(value)" style="font-size: 1.5rem;">
-                                                    <po-icon p-icon="po-icon-calendar" style="color: var(--color-01); cursor: pointer;"></po-icon>
-                                                </div>
+                                            <div style="display: flex; align-items: center; justify-content: center;">                                                
+                                                    @if(value != "[]"){
+                                                        <button (click)="openModalMarcacoes(value)" style="font-size: 1.5rem; background: none; border: none">
+                                                            <po-icon p-icon="po-icon-calendar" style="color: var(--color-01); cursor: pointer;"></po-icon>
+                                                        </button>
+                                                    }
+
+                                                    @else {
+                                                        <button style="font-size: 1.5rem; background: none; border: none">
+                                                            <po-icon p-icon="po-icon-calendar" style="color: red; cursor: pointer;" title="Não ha batidas"></po-icon>
+                                                        </button>
+                                                    }                                                
                                             </div>
                                         </ng-template>
                                     </po-table>
@@ -308,7 +323,7 @@
 
 <!-- MODAIS -->
     
-<!-- FILTROS -->
+<!-- MODAL FILTROS -->
 <po-modal #modalFilters p-title="Filtros">
     <po-container>
         <div class="po-row po-mb-1">
@@ -589,6 +604,37 @@
         </po-container>
     }
 
+    @if(filters.marcacoesCarolDtsSip){
+        <br/>
+        <po-container>
+            <div class="po-row">
+                <span>Marcações Carol X Datasul/Sip</span>
+            </div>
+            
+            <div class="po-row">
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataIniProcessoCarol"
+                    p-label="Data do Processo"
+                    p-format="dd/mm/yyyy"
+                    p-placeholder="01/01/0001"></po-datepicker>
+        
+                <po-datepicker class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.dataFimProcessoCarol"
+                    p-label=" "                
+                    p-placeholder="31/12/9999"></po-datepicker>
+            </div>
+
+            <div class="po-row po-mb-1">
+                <po-input class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+                    [(ngModel)]="filters.cpfCarol"
+                    p-label="CPF"
+                    p-mask="99999999999"
+                    [p-maxlength]="11"
+                ></po-input>
+            </div>
+        </po-container>
+    }
+
     <po-modal-footer [p-disabled-align]="false">
         <po-button p-label="Resetar Filtros" (p-click)="resetFilters()"> </po-button>
         <po-button p-label="Cancelar" (p-click)="cancelFilter()"> </po-button>
@@ -598,6 +644,7 @@
 </po-modal>
 
 
+<!-- MODAL TIPO DE INTEGRAÇÃO -->
 <po-modal #modalParameter p-title="Filtros" [p-hide-close]="true">
     <po-container>
         <div class="po-row">
@@ -608,6 +655,16 @@
         </div>
     </po-container>
 
+    <br/>
+    <po-container>
+        <div class="po-row">
+            <po-input class="po-xl-12 po-lg-12 po-md-12 po-sm-12"
+                [(ngModel)]="caminhoPasoe"
+                p-label="Caminho Pasoe"
+            ></po-input>
+        </div>
+    </po-container>
+
     <po-modal-footer [p-disabled-align]="false">
         <po-button p-label="Cancelar" (p-click)="cancelParameter()"> </po-button>
         <po-button p-label="OK" (p-click)="okParameter()"> </po-button>
@@ -615,6 +672,7 @@
 
 </po-modal>
 
+<!-- MODAL BATIDAS -->
 <po-modal #modalMarcacoes p-title="Marcações (Batidas)" [p-hide-close]="true">
     <po-container>
         <div class="po-row" class="po-xl-12 po-lg-12 po-md-12 po-sm-12">

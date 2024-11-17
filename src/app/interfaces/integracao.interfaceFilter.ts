@@ -40,6 +40,10 @@ export class IntegracaoFilter {
     situacaoAfastamento:string = ""
     cidMarcacao:string = ""
     crmMarcacao:string = ""
+    //Filtros Carol X Datasul/Sip
+    dataIniProcessoCarol?:Date
+    dataFimProcessoCarol?:Date
+    cpfCarol:string = ""
     //Tipos de Integrações
     planejadoSipDts:boolean = (localStorage.getItem("planejadoSipDts") == 'true')
     movimentacaoSipDts:boolean = (localStorage.getItem("movimentacaoSipDts") == 'true')

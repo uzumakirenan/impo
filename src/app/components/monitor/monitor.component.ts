@@ -47,6 +47,8 @@ export class MonitorComponent implements OnInit{
   totalNovosRegistros:number = 0
   marcacoes:any[] = []
 
+  caminhoPasoe:string = "http://172.20.32.122:8092/apsv"
+
   constructor(
     private monitorService: MonitorService,
     public notificationsService: PoNotificationService,
@@ -232,11 +234,11 @@ export class MonitorComponent implements OnInit{
         break;
 
       case 2:
-        return this.integrations.filter(x => x.situacao == "ERRO").length
+        return this.integrations.filter(x => x.situacao.situacao == "ERRO").length
         break;  
 
       case 3:
-        return this.integrations.filter(x => x.situacao == "OK").length
+        return this.integrations.filter(x => x.situacao.situacao == "OK").length
         break;
 
       default:
@@ -280,7 +282,12 @@ export class MonitorComponent implements OnInit{
         }
 
         this.loading = true
-        this.getIntegrations()
+        if(this.integrations.length > 0){
+          this.refresh()
+        } else {
+          this.getIntegrations()
+        }
+        
         this.modalFilters?.close()
       }
         
@@ -340,6 +347,8 @@ export class MonitorComponent implements OnInit{
   }
 
   openModalMarcacoes(e:string){
+    console.clear()
+    console.log(e)
     this.marcacoes = []
     const marcacoesJson = JSON.parse(e.replaceAll("-", "/"))
     this.marcacoes = marcacoesJson
