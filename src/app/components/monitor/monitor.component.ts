@@ -641,40 +641,49 @@ export class MonitorComponent implements OnInit{
             { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
             { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
             { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Data Calendário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Ini Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Fim Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Ini Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Fim Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Sindicato', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Posto', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
+            { v: 'CPF', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Data Processo', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
+            { v: 'Marcações', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
             ]
           )
-        }
 
-        if(tipo == "Envio Marcações Cingo x SIP"){
-          dados.push([
-            { v: "", t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}}, 
-            { v: 'Status', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Empresa', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Estabelecimento', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Matrícula', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Nome Funcionário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Data Calendário', t: 's', s: { font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Escala', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'KDiario', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Tipo Dia', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Ini Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Fim Jornada 1', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Ini Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Fim Jornada 2', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Sindicato', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } },
-            { v: 'Posto', t: 's', s: { border:{ top: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}, font: { bold: true }, fill: { fgColor: { rgb: "e3f7ea" } } } }        
-            ]
-          )
+          dado.detail.forEach((detail:any, idx:any) => { 
+            let currentMarcacoes = ""
+            const marcacoesJson = detail.onTimeInfo ? JSON.parse(detail.onTimeInfo) : []
+            marcacoesJson.forEach((marc:any, idxMarc:any) => {
+              if(idxMarc == 0){
+                currentMarcacoes = marc.conteudo + " - " + marc.dataBatida.replaceAll("-", "/")
+              } else {
+                currentMarcacoes = currentMarcacoes + "; " + marc.conteudo + " - " + marc.dataBatida.replaceAll("-", "/")
+              }
+            })
+
+            if((dado.detail.length - 1) === idx){
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.cpf ? detail.cpf : "",                
+                { v: detail.dataProcesso ? new Date(detail.dataProcesso).toLocaleDateString() : "",   t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}}}},
+                { v: currentMarcacoes,            t: 's', s: { border:{ bottom: { style: "thin", color: { rgb: "000000"}}, right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ])
+            } else {
+              dados.push([
+                { v: "", t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}} }, fill: { fgColor: { rgb: "ffffff" } }}},  
+                detail.situacao ? detail.situacao : "", 
+                detail.emp ? detail.emp : "", 
+                detail.estab ? detail.estab : "", 
+                detail.matricula ? detail.matricula : "", 
+                detail.nomeFuncionario ? detail.nomeFuncionario : "", 
+                detail.cpf ? detail.cpf : "", 
+                detail.dataProcesso ? new Date(detail.dataProcesso).toLocaleDateString() : "",
+                { v: currentMarcacoes, t: 's', s: { border:{ right: { style: "thin", color: { rgb: "000000"}}}}}            
+              ]) 
+            }           
+          })
         }
       }
       
@@ -685,7 +694,7 @@ export class MonitorComponent implements OnInit{
     const worksheet = XLSX.utils.aoa_to_sheet(dados);
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
 
-    XLSX.writeFile(workbook, 'planilha_env_planejado.xlsx');
+    XLSX.writeFile(workbook, tipo + '.xlsx');
     
   }
 }
