@@ -38,7 +38,7 @@ export class MonitorComponent implements OnInit{
   lastFilters?:IntegracaoFilter
   pasoeIsConnected:string = "pasoeConnecting" //"pasoeON"
   bancosDesconectados:string = ""
-  autoRefreshSwitch:boolean = true
+  autoRefreshSwitch:boolean = false
   intervalAutoRefresh?:any
   lastUpdate?:Date
   firstSearch:boolean = true
@@ -47,7 +47,7 @@ export class MonitorComponent implements OnInit{
   totalNovosRegistros:number = 0
   marcacoes:any[] = []
 
-  caminhoPasoe:string = "http://172.20.32.122:8092/apsv"
+  //caminhoPasoe:string = "http://172.20.32.122:8092/apsv"
 
   constructor(
     private monitorService: MonitorService,
@@ -58,6 +58,7 @@ export class MonitorComponent implements OnInit{
 
   ngOnInit(): void {
     this.notificationsService.setDefaultDuration(3000)
+    this.getCaminhoPasoe()
     this.autoRefresh()
     this.getStatusPasoe()
   }
@@ -161,6 +162,26 @@ export class MonitorComponent implements OnInit{
     this.loading = false
     this.currentRequest.unsubscribe()
     this.currentRequest = undefined    
+  }
+
+  getCaminhoPasoe(){
+    this.monitorService.getEnderecoPasoe().subscribe({
+      next: result => {
+        this.filters.caminhoPasoe = result.caminhoPasoe
+      }
+    })
+  }
+
+  setCaminhoPasoe(){
+    let compareLastFilter:IntegracaoFilter = JSON.parse(JSON.stringify(this.lastFilters))
+    
+    if(compareLastFilter.caminhoPasoe != this.filters.caminhoPasoe) {
+      this.monitorService.setEnderecoPasoe(this.filters.caminhoPasoe).subscribe({
+        next: () => {
+          this.notificationsService.success(`Endereço PASOE salvo com sucesso.`)
+        }
+      })
+    }    
   }
 
   getIntegrations(){
@@ -331,12 +352,15 @@ export class MonitorComponent implements OnInit{
   }
 
   okParameter(){
-    this.lastFilters = JSON.parse(JSON.stringify(this.filters))
-    localStorage.setItem("planejadoSipDts", String(this.filters.planejadoSipDts))
-    localStorage.setItem("movimentacaoSipDts", String(this.filters.movimentacaoSipDts))
-    localStorage.setItem("marcacoesCarolDtsSip", String(this.filters.marcacoesCarolDtsSip))
-    localStorage.setItem("marcacoesCingoSip", String(this.filters.marcacoesCingoSip))
-    this.modalParameter?.close()
+    setTimeout(() => {
+      //this.lastFilters = JSON.parse(JSON.stringify(this.filters))
+      localStorage.setItem("planejadoSipDts", String(this.filters.planejadoSipDts))
+      localStorage.setItem("movimentacaoSipDts", String(this.filters.movimentacaoSipDts))
+      localStorage.setItem("marcacoesCarolDtsSip", String(this.filters.marcacoesCarolDtsSip))
+      localStorage.setItem("marcacoesCingoSip", String(this.filters.marcacoesCingoSip))
+      this.setCaminhoPasoe()
+      this.modalParameter?.close()
+    }, 100)
   }
 
   cancelParameter(){

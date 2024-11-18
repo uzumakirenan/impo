@@ -24,4 +24,12 @@ export class MonitorService {
   getNovasEntradas():Observable<any>{
     return this.httpClient.get<any>(this.url + "getNovasEntradas")
   }
+
+  getEnderecoPasoe():Observable<any>{
+    return this.httpClient.get<any>(this.url + "pasoe")
+  }
+
+  setEnderecoPasoe(caminhoPasoe:string):Observable<any>{
+    return this.httpClient.post<any>(this.url + "pasoe", { caminhoPasoe })
+  }
 }

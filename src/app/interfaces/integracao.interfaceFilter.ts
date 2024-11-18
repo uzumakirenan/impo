@@ -49,4 +49,5 @@ export class IntegracaoFilter {
     movimentacaoSipDts:boolean = (localStorage.getItem("movimentacaoSipDts") == 'true')
     marcacoesCarolDtsSip:boolean = (localStorage.getItem("marcacoesCarolDtsSip") == 'true')
     marcacoesCingoSip:boolean = (localStorage.getItem("marcacoesCingoSip") == 'true')
+    caminhoPasoe:string = ""
 }
