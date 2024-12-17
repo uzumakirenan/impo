@@ -59,7 +59,6 @@ export class MonitorComponent implements OnInit{
   ngOnInit(): void {
     this.notificationsService.setDefaultDuration(3000)
     this.getCaminhoPasoe()
-    this.autoRefresh()
     this.getStatusPasoe()
   }
 
@@ -185,6 +184,7 @@ export class MonitorComponent implements OnInit{
   }
 
   getIntegrations(){
+    this.loading = true
     this.currentRequest = this.monitorService.getIntegrations(this.filters).subscribe({
       next: result => {
         this.integrations = result.items
@@ -210,9 +210,9 @@ export class MonitorComponent implements OnInit{
     this.tableMarcacaoCarolDtsSip?.unselectRows()
     this.retornoIntegracao = e.descricao
 
-    if(e.situacao == "ERRO"){
-      this.jsonEnviado = e.jsonEnviado
-      this.jsonRetorno = e.jsonRetorno
+    if(e.situacao.situacao == "ERRO"){
+      this.jsonEnviado = e.jsonEnviado.replaceAll("\r\n", "").replaceAll("\"", "").replaceAll(" ", "")
+      this.jsonRetorno = e.jsonRetorno.replaceAll("\r\n", "").replaceAll("\"", "").replaceAll(" ", "")
     }
 
     else {
@@ -302,7 +302,6 @@ export class MonitorComponent implements OnInit{
           this.firstSearch = false
         }
 
-        this.loading = true
         if(this.integrations.length > 0){
           this.refresh()
         } else {
@@ -425,7 +424,7 @@ export class MonitorComponent implements OnInit{
         }
       })
       this.lastUpdate = new Date()
-    }, 5000)
+    }, 60000)
   }
 
   changeAutoRefresh(e:any){
